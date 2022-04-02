@@ -7,26 +7,29 @@
 #include <vector>
 #include <iostream>
 #include "carrinha.h"
+#include "encomenda.h"
 
 
 class File {
 private:
-    std::string path;
     std::vector<Carrinha> carrinhas;
+    std::vector<Encomenda> encomendas;
 
 
 public:
-    File(std::string path);
+    File();
 
-    std::vector<Carrinha> readAndParse(std::string path);
+    std::vector<Carrinha> readAndParseCar(std::string path);
 
-    void setPath(std::string path);
-
-    std::string getPath();
+    std::vector<Encomenda> readAndParseEnc(std::string path);
 
     std::vector<Carrinha> getCarrinhas();
 
+    std::vector<Encomenda> getEncomendas();
+
     void printCarrinhas();
+
+    void printEncomendas();
 };
 
 

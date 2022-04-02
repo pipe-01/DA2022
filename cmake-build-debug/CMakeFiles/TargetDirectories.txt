@@ -1,3 +1,0 @@
-C:/Users/Filipe Pinto/Desktop/FEUP/DA2022/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Filipe Pinto/Desktop/FEUP/DA2022/cmake-build-debug/CMakeFiles/DA2022.dir
-C:/Users/Filipe Pinto/Desktop/FEUP/DA2022/cmake-build-debug/CMakeFiles/rebuild_cache.dir
