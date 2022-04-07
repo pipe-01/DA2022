@@ -1,5 +1,7 @@
 {
     "files.associations": {
+        "html": "html",
+        "*.pl": "prolog",
         "atomic": "cpp",
         "cmath": "cpp",
         "compare": "cpp",
@@ -39,6 +41,10 @@
         "xstddef": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "bit": "cpp",
+        "cctype": "cpp",
+        "clocale": "cpp",
+        "ctime": "cpp"
     }
 }

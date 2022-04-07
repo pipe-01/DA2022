@@ -1,17 +1,15 @@
-//
-// Created by Filipe on 02/04/2022.
-//
-
 #include <fstream>
 #include "File.h"
 
+using namespace std;
+
 File::File() {}
 
-std::vector<Carrinha> File::readAndParseCar(std::string path) {
+vector<Carrinha> File::readAndParseCar(std::string path) {
     int vol, peso, cost;
-    std::ifstream readFile (path);
+    ifstream readFile (path);
     if(!readFile){
-        std::cout << "Can't open file"<< std::endl;
+        cout << "Can't open file"<< std::endl;
     }
     else {
         while (readFile.good()) {

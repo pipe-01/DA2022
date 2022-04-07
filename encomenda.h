@@ -1,7 +1,3 @@
-//
-// Created by Filipe on 02/04/2022.
-//
-
 #ifndef DA2022_ENCOMENDA_H
 #define DA2022_ENCOMENDA_H
 
