@@ -5,23 +5,24 @@
 #include "carrinha.h"
 #include "encomenda.h"
 
+using namespace std;
 
 class File {
 private:
-    std::vector<Carrinha> carrinhas;
-    std::vector<Encomenda> encomendas;
+    vector<Carrinha> carrinhas;
+    vector<Encomenda> encomendas;
 
 
 public:
     File();
 
-    std::vector<Carrinha> readAndParseCar(std::string path);
+    vector<Carrinha> readAndParseCar(string path);
 
-    std::vector<Encomenda> readAndParseEnc(std::string path);
+    vector<Encomenda> readAndParseEnc(string path);
 
-    std::vector<Carrinha> getCarrinhas();
+    vector<Carrinha> getCarrinhas();
 
-    std::vector<Encomenda> getEncomendas();
+    vector<Encomenda> getEncomendas();
 
     void printCarrinhas();
 

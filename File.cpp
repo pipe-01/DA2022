@@ -5,11 +5,11 @@ using namespace std;
 
 File::File() {}
 
-vector<Carrinha> File::readAndParseCar(std::string path) {
+vector<Carrinha> File::readAndParseCar(string path) {
     int vol, peso, cost;
     ifstream readFile (path);
     if(!readFile){
-        cout << "Can't open file"<< std::endl;
+        cout << "Can't open file"<< endl;
     }
     else {
         while (readFile.good()) {
@@ -22,11 +22,11 @@ vector<Carrinha> File::readAndParseCar(std::string path) {
     return carrinhas;
 }
 
-std::vector<Encomenda> File::readAndParseEnc(std::string path){
+vector<Encomenda> File::readAndParseEnc(string path){
     int vol, peso, cost, dur;
-    std::ifstream readFile (path);
+    ifstream readFile (path);
     if(!readFile){
-        std::cout << "Can't open file"<< std::endl;
+        cout << "Can't open file"<< endl;
     }
     else {
         while (readFile.good()) {
@@ -40,25 +40,25 @@ std::vector<Encomenda> File::readAndParseEnc(std::string path){
 }
 
 
-std::vector<Carrinha> File::getCarrinhas() {
+vector<Carrinha> File::getCarrinhas() {
     return carrinhas;
 }
 
-std::vector<Encomenda> File::getEncomendas(){
+vector<Encomenda> File::getEncomendas(){
     return encomendas;
 }
 
 //just for debug
 void File::printCarrinhas(){
     for (auto aux : carrinhas) {
-        std::cout << aux.volMax << '\t' << aux.pesoMax << '\t' << aux.custo << std::endl;
+        cout << aux.volMax << '\t' << aux.pesoMax << '\t' << aux.custo << endl;
     }
 }
 
 //just for debug
 void File::printEncomendas(){
     for (auto aux : encomendas) {
-        std::cout << aux.volume << '\t' << aux.peso << '\t' << aux.recompensa << '\t' << aux.duracao << std::endl;
+        cout << aux.volume << '\t' << aux.peso << '\t' << aux.recompensa << '\t' << aux.duracao << endl;
     }
 }
 
