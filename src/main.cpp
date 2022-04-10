@@ -1,5 +1,6 @@
 #include <iostream>
 #include "File.h"
+#include "binpacking.h"
 
 int main() {
     File file;
