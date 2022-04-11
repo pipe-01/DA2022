@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <vector>
 #include "File.h"
+#include "encomenda.h"
 
 #define MAXHOURS 28800
 
