@@ -1,16 +1,29 @@
 #ifndef DA2022_CARRINHA_H
 #define DA2022_CARRINHA_H
 
-struct Carrinha{
+#include<string>
+#include <vector>
+#include <algorithm>
+#include "encomenda.h"
+
+class Carrinha{
+
+private:
+    //std::string matrícula;
     int volMax;
     int pesoMax;
     int custo;
+    int capacidade; //volMax + pesoMax
 
-
-    Carrinha(int vol, int peso, int cost)
-        : volMax(vol), pesoMax(peso), custo(cost) {}
-    Carrinha()
-            : volMax(0), pesoMax(0), custo(0) {}
+public:
+    Carrinha();
+    Carrinha(/*std::string matrícula, */int volMax, int pesoMax, int custo, int capacidade);
+    //std::string getMatrícula() const;
+    int getCapacidade() const;
+    int getVolMax() const;
+    int getPesoMax() const;
+    int getCusto() const;
+    int minNumEstafetas(std::vector<Carrinha> carrinhas, std::vector<Encomenda> encomendas);
 };
 
 #endif //DA2022_CARRINHA_H

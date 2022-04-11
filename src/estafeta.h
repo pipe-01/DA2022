@@ -1,21 +1,21 @@
 #ifndef ESTAFETA_H
 #define ESTAFETA_H
 
-using namespace std;
-
 class Estafeta{
+private:
+    std::string matricula;
+    unsigned int volumeMax;
+    unsigned int pesoMax;
+    unsigned int custo;
 
-    public:
+public:
+     Estafeta();
+     Estafeta(std::string matricula, unsigned int volumeMax, unsigned int pesoMax, unsigned int custo);
+     unsigned int getVolumeMax() const;
+     unsigned int getPesoMax() const;
+     unsigned int getCusto() const;
+     std::string getMatricula() const;
 
-        Estafeta(unsigned int eVol, unsigned int eWeight, unsigned int eCost);
-        unsigned int getVolume();
-        unsigned int getWeight();
-        unsigned int getCost();
-        
-    private:
-        unsigned int maxVolume;
-        unsigned int maxWeight;
-        unsigned int cost;
 };
 
 #endif

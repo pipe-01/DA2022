@@ -1,11 +1,13 @@
-#include <iostream>
 #include "File.h"
+#include "menu.h"
 
 int main() {
     File file;
-    file.readAndParseCar("carrinhas.txt");
-    file.readAndParseEnc("encomendas.txt");
+    std::vector<Carrinha> carrinhas = file.readAndParseCar("C:\\Users\\ASUS\\PROJETODA\\DA2022\\src\\carrinhas.txt");
+    std::vector<Encomenda> encomendas = file.readAndParseEnc("C:\\Users\\ASUS\\PROJETODA\\DA2022\\src\\encomendas.txt");
     //file.printCarrinhas();
-    file.printEncomendas();
-    return 0;
+    //file.printEncomendas();
+    Menu menu;
+    menu.showMenu();
+    menu.takeInput(carrinhas, encomendas);
 }

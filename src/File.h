@@ -20,9 +20,9 @@ public:
 
     vector<Encomenda> readAndParseEnc(string path);
 
-    vector<Carrinha> getCarrinhas();
+    /*vector<Carrinha> getCarrinhas();
 
-    vector<Encomenda> getEncomendas();
+    vector<Encomenda> getEncomendas();*/
 
     void printCarrinhas();
 

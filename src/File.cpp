@@ -15,7 +15,7 @@ vector<Carrinha> File::readAndParseCar(string path) {
         while (readFile.good()) {
             readFile.ignore(256, '\n');
             readFile >> vol >> peso >> cost;
-            carrinhas.emplace_back(vol, peso, cost);
+            carrinhas.emplace_back(vol, peso, cost, vol+peso);
         }
     }
     readFile.close();
@@ -32,7 +32,7 @@ vector<Encomenda> File::readAndParseEnc(string path){
         while (readFile.good()) {
             readFile.ignore(256, '\n');
             readFile >> vol >> peso >> cost >> dur;
-            encomendas.emplace_back(vol, peso, cost, dur);
+            encomendas.emplace_back(vol, peso, cost, dur, vol+peso);
         }
     }
     readFile.close();
@@ -40,25 +40,25 @@ vector<Encomenda> File::readAndParseEnc(string path){
 }
 
 
-vector<Carrinha> File::getCarrinhas() {
+/*vector<Carrinha> File::getCarrinhas() {
     return carrinhas;
 }
 
 vector<Encomenda> File::getEncomendas(){
     return encomendas;
-}
+}*/
 
 //just for debug
 void File::printCarrinhas(){
     for (auto aux : carrinhas) {
-        cout << aux.volMax << '\t' << aux.pesoMax << '\t' << aux.custo << endl;
+        cout << aux.getVolMax() << '\t' << aux.getPesoMax() << '\t' << aux.getCusto() << endl;
     }
 }
 
 //just for debug
 void File::printEncomendas(){
     for (auto aux : encomendas) {
-        cout << aux.volume << '\t' << aux.peso << '\t' << aux.recompensa << '\t' << aux.duracao << endl;
+        cout << aux.getVolume() << '\t' << aux.getPeso() << '\t' << aux.getRecompensa() << '\t' << aux.getDuracao() << endl;
     }
 }
 

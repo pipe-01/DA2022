@@ -1,17 +1,24 @@
 #ifndef DA2022_ENCOMENDA_H
 #define DA2022_ENCOMENDA_H
 
-struct Encomenda{
+class Encomenda{
+
+private:
     int volume;
     int peso;
     int recompensa;
     int duracao;
+    int tamanho; //volume + peso
 
+public:
+    Encomenda();
+    Encomenda(int volume, int peso, int recompensa, int duracao, int tamanho);
+    int getVolume() const;
+    int getPeso() const;
+    int getRecompensa() const;
+    int getDuracao() const;
+    int getTamanho() const;
 
-    Encomenda(int vol, int peso, int custo, int dur)
-        : volume(vol), peso(peso), recompensa(custo), duracao(dur) {}
-    Encomenda()
-            : volume(0), peso(0), recompensa(0), duracao(0) {}
 };
 
 #endif //DA2022_ENCOMENDA_H
