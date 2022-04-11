@@ -39,12 +39,11 @@ void sortRequests(vector<Pedido> *requests){
 }
 
 void sortWorkers(vector<Estafeta> *workers){
-    
+
     sort(workers->begin(), workers->end(), compareCost);
 }
 
-//just for testing
-int main(){
+vector<Pedido> testingReq(){
 
     Pedido p1 = Pedido(50,30,20);
     Pedido p2 = Pedido(50,30,10);
@@ -55,10 +54,43 @@ int main(){
     v.push_back(p2);
     v.push_back(p3);
 
-    // vector<Pedido> res = sortRequests(v);
-    sortRequests(&v);
+    return v;
+}
 
-    for(auto i : v){
-        cout << i.getPayment() << endl;
+vector<Estafeta> testingWork(){
+
+    Estafeta e1 = Estafeta(60,60,14);
+    Estafeta e2 = Estafeta(20,30,17);
+    Estafeta e3 = Estafeta(25,10,13);
+
+    vector<Estafeta> v;
+    v.push_back(e1);
+    v.push_back(e2);
+    v.push_back(e3);
+    
+    return v;
+}
+
+void cenario2(){
+
+    vector<Pedido> requests = testingReq();
+    vector<Estafeta> workers = testingWork();
+
+    sortRequests(&requests);
+    sortWorkers(&workers);
+
+    //test sorting
+    // for(auto i : workers){
+    //     cout << i.getCost() << endl;
+    // }
+
+    for(auto request : requests){
+
     }
+}
+
+//just for testing
+int main(){
+
+    cenario2();
 }

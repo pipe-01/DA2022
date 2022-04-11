@@ -2,6 +2,7 @@
     "files.associations": {
         "html": "html",
         "*.pl": "prolog",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "vector": "cpp"
     }
 }
