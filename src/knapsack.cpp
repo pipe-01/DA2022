@@ -10,3 +10,11 @@
 
 // Estafeta = volume máximo, peso máximo e custo/percentagem
 // Encomenda = Volume, peso e recompensa    
+
+
+//ordenar os pagamentos dos estafetas por ordem crescente
+// escolher o primeiro
+// ordem decrescente de profit
+// ver se e viavel
+// se nao for exclui solução
+// se for adiciona e passa ao seguinte
