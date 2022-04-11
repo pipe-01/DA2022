@@ -61,4 +61,3 @@ void File::printEncomendas(){
         cout << aux.getVolume() << '\t' << aux.getPeso() << '\t' << aux.getRecompensa() << '\t' << aux.getDuracao() << endl;
     }
 }
-

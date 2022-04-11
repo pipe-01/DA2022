@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "html": "html",
+        "*.pl": "prolog",
+        "algorithm": "cpp",
+        "vector": "cpp"
+    }
+}

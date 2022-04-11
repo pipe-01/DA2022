@@ -1,6 +1,5 @@
-#ifndef DA2022_CARRINHA_H
-#define DA2022_CARRINHA_H
-
+#ifndef PROJETODA_CARRINHA_H
+#define PROJETODA_CARRINHA_H
 #include<string>
 #include <vector>
 #include <algorithm>
@@ -26,4 +25,4 @@ public:
     int minNumEstafetas(std::vector<Carrinha> carrinhas, std::vector<Encomenda> encomendas);
 };
 
-#endif //DA2022_CARRINHA_H
+#endif PROJETODA_CARRINHA_H

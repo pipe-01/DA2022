@@ -1,5 +1,5 @@
-#ifndef DA2022_ENCOMENDA_H
-#define DA2022_ENCOMENDA_H
+#ifndef PROJETODA_ENCOMENDA_H
+#define PROJETODA_ENCOMENDA_H
 
 class Encomenda{
 
@@ -21,4 +21,4 @@ public:
 
 };
 
-#endif //DA2022_ENCOMENDA_H
+#endif PROJETODA_ENCOMENDA_H
