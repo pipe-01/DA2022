@@ -2,7 +2,7 @@
 
 bool compareTime(Encomenda a, Encomenda b)
 {
-     return (a.duracao < b.duracao);
+     return (a.getDuracao() < b.getDuracao());
 }
 
 double cenario3(std::vector<Encomenda> encomendas){
@@ -14,9 +14,9 @@ double cenario3(std::vector<Encomenda> encomendas){
     std::vector<Encomenda> descartados;
  
     for(auto aux: encomendas){
-        if(totalTime + aux.duracao <= MAXHOURS){
+        if(totalTime + aux.getDuracao() <= MAXHOURS){
             entregas.push_back(aux);
-            totalTime += aux.duracao;
+            totalTime += aux.getDuracao();
         }
         else{
             descartados.push_back(aux);
@@ -33,7 +33,7 @@ double cenario3(std::vector<Encomenda> encomendas){
 
 void printVector(std::vector<Encomenda> array){
     for(auto aux: array){
-        std::cout << "volume: " << aux.volume << " peso: " << aux.peso << " duracao: " << aux.duracao << std::endl;
+        std::cout << "volume: " << aux.getVolume() << " peso: " << aux.getPeso() << " duracao: " << aux.getDuracao() << std::endl;
     }
 
     std::cout << "tamanho " << array.size() << std::endl;
