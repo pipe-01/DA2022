@@ -1,5 +1,5 @@
-#ifndef PROJETODA_ENCOMENDA_H
-#define PROJETODA_ENCOMENDA_H
+#ifndef ENCOMENDA_H
+#define ENCOMENDA_H
 
 class Encomenda{
 
@@ -12,7 +12,7 @@ private:
 
 public:
     Encomenda();
-    Encomenda(int volume, int peso, int recompensa, int duracao, int tamanho);
+    Encomenda(int volume, int peso, int recompensa, int duracao);
     int getVolume() const;
     int getPeso() const;
     int getRecompensa() const;
@@ -21,4 +21,4 @@ public:
 
 };
 
-#endif PROJETODA_ENCOMENDA_H
+#endif

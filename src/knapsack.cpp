@@ -9,8 +9,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "pedido.cpp"
-#include "estafeta.cpp"
+#include "encomenda.cpp"
+#include "carrinha.cpp"
 
 // Estafeta = volume máximo, peso máximo e custo/percentagem
 // Encomenda = Volume, peso e recompensa    
@@ -25,31 +25,31 @@
 
 using namespace std;
 
-bool comparePayment(Pedido x, Pedido y){
-    return (x.getPayment()<y.getPayment());
+bool comparePayment(Encomenda x, Encomenda y){
+    return (x.getRecompensa()>y.getRecompensa());
 }
 
-bool compareCost(Estafeta x, Estafeta y){
-    return (x.getCost()<y.getCost());
+bool compareCost(Carrinha x, Carrinha y){
+    return (x.getCusto()<y.getCusto());
 }
 
-void sortRequests(vector<Pedido> *requests){
+void sortRequests(vector<Encomenda> *requests){
 
     sort(requests->begin(), requests->end(), comparePayment);
 }
 
-void sortWorkers(vector<Estafeta> *workers){
+void sortWorkers(vector<Carrinha> *workers){
 
     sort(workers->begin(), workers->end(), compareCost);
 }
 
-vector<Pedido> testingReq(){
+vector<Encomenda> testingReq(){
 
-    Pedido p1 = Pedido(50,30,20);
-    Pedido p2 = Pedido(50,30,10);
-    Pedido p3 = Pedido(50,30,30);
+    Encomenda p1 = Encomenda(50,30,20,1);
+    Encomenda p2 = Encomenda(50,30,10,1);
+    Encomenda p3 = Encomenda(50,30,30,1);
 
-    vector<Pedido> v;
+    vector<Encomenda> v;
     v.push_back(p1);
     v.push_back(p2);
     v.push_back(p3);
@@ -57,13 +57,13 @@ vector<Pedido> testingReq(){
     return v;
 }
 
-vector<Estafeta> testingWork(){
+vector<Carrinha> testingWork(){
 
-    Estafeta e1 = Estafeta(60,60,14);
-    Estafeta e2 = Estafeta(20,30,17);
-    Estafeta e3 = Estafeta(25,10,13);
+    Carrinha e1 = Carrinha(60,60,14);
+    Carrinha e2 = Carrinha(20,30,17);
+    Carrinha e3 = Carrinha(25,10,13);
 
-    vector<Estafeta> v;
+    vector<Carrinha> v;
     v.push_back(e1);
     v.push_back(e2);
     v.push_back(e3);
@@ -73,16 +73,19 @@ vector<Estafeta> testingWork(){
 
 void cenario2(){
 
-    vector<Pedido> requests = testingReq();
-    vector<Estafeta> workers = testingWork();
+    vector<Encomenda> requests = testingReq();
+    vector<Carrinha> workers = testingWork();
 
     sortRequests(&requests);
     sortWorkers(&workers);
 
     //test sorting
     // for(auto i : workers){
-    //     cout << i.getCost() << endl;
+    //     cout << i.getCusto() << endl;
     // }
+    for(auto i : requests){
+        cout << i.getRecompensa() << endl;
+    }
 
     for(auto request : requests){
 

@@ -1,5 +1,5 @@
-#ifndef PROJETODA_CARRINHA_H
-#define PROJETODA_CARRINHA_H
+#ifndef CARRINHA_H
+#define CARRINHA_H
 #include<string>
 #include <vector>
 #include <algorithm>
@@ -25,4 +25,4 @@ public:
     int minNumEstafetas(std::vector<Carrinha> carrinhas, std::vector<Encomenda> encomendas);
 };
 
-#endif PROJETODA_CARRINHA_H
+#endif

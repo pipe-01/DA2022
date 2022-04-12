@@ -66,4 +66,6 @@ int Carrinha::minNumEstafetas(std::vector<Carrinha> carrinhas, std::vector<Encom
             }
         }
     }
+
+    return numEstafetas;
 }
