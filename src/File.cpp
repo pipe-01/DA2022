@@ -15,7 +15,7 @@ vector<Carrinha> File::readAndParseCar(string path) {
         while (readFile.good()) {
             readFile.ignore(256, '\n');
             readFile >> vol >> peso >> cost;
-            carrinhas.emplace_back(vol, peso, cost, vol+peso);
+            carrinhas.emplace_back(vol, peso, cost/*, vol+peso*/);
         }
     }
     readFile.close();

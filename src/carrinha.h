@@ -12,13 +12,13 @@ private:
     int volMax;
     int pesoMax;
     int custo;
-    int capacidade; //volMax + pesoMax
+    //int capacidade; //volMax + pesoMax
 
 public:
     Carrinha();
-    Carrinha(/*std::string matrícula, */int volMax, int pesoMax, int custo, int capacidade);
+    Carrinha(/*std::string matrícula, */int volMax, int pesoMax, int custo/*, int capacidade*/);
     //std::string getMatrícula() const;
-    int getCapacidade() const;
+    //int getCapacidade() const;
     int getVolMax() const;
     int getPesoMax() const;
     int getCusto() const;
