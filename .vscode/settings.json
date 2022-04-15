@@ -3,6 +3,7 @@
         "html": "html",
         "*.pl": "prolog",
         "algorithm": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "tuple": "cpp"
     }
 }
