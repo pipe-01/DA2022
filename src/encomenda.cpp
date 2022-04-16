@@ -2,7 +2,7 @@
 
 Encomenda::Encomenda(): volume(0), peso(0), recompensa(0), duracao(0), tamanho(0) {}
 
-Encomenda::Encomenda(int volume, int peso, int recompensa, int duracao) {
+Encomenda::Encomenda(int volume, int peso, int recompensa, int duracao, int tamanho) {
     this->volume = volume;
     this->peso = peso;
     this->recompensa = recompensa;

@@ -12,7 +12,7 @@ private:
 
 public:
     Encomenda();
-    Encomenda(int volume, int peso, int recompensa, int duracao);
+    Encomenda(int volume, int peso, int recompensa, int duracao, int tamanho);
     int getVolume() const;
     int getPeso() const;
     int getRecompensa() const;
