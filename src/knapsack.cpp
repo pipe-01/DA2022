@@ -6,15 +6,8 @@
 // Time complexity : O(nlog(n))
 // Space complexity : O(n)
 
-#include <iostream>
-#include <iomanip>
-#include <vector>
-#include <algorithm>
-#include <iterator>
-#include <tuple>
-#include <list>
-#include "encomenda.cpp"
-#include "carrinha.cpp"
+#include "knapsack.h"
+// #include <unistd.h>
 
 // Estafeta = volume máximo, peso máximo e custo/percentagem
 // Encomenda = Volume, peso e recompensa    
@@ -28,7 +21,6 @@
 // se for adiciona e passa ao seguinte
 
 //ratio = custo/(vol+peso)
-using namespace std;
 
 double ratio(int cost, int vol, int weight){
     return (double)cost/(vol+weight);
@@ -51,93 +43,112 @@ bool compareCost(Carrinha x, Carrinha y){
     return (xAux<yAux);
 }
 
-void sortRequests(vector<Encomenda> *requests){
+void sortRequests(std::vector<Encomenda> *requests){
 
     sort(requests->begin(), requests->end(), comparePayment);
 }
 
-void sortWorkers(vector<Carrinha> *workers){
+void sortWorkers(std::vector<Carrinha> *workers){
 
     sort(workers->begin(), workers->end(), compareCost);
 }
 
-vector<Encomenda> testingReq(){
+// std::vector<Encomenda> testingReq(){
 
-    Encomenda p1 = Encomenda(50,30,20,1);
-    Encomenda p2 = Encomenda(50,30,10,1);
-    Encomenda p3 = Encomenda(50,30,30,1);
+//     Encomenda p1 = Encomenda(50,30,20,1);
+//     Encomenda p2 = Encomenda(50,30,10,1);
+//     Encomenda p3 = Encomenda(50,30,30,1);
 
-    vector<Encomenda> v;
-    v.push_back(p1);
-    v.push_back(p2);
-    v.push_back(p3);
+//     std::vector<Encomenda> v;
+//     v.push_back(p1);
+//     v.push_back(p2);
+//     v.push_back(p3);
 
-    return v;
-}
+//     return v;
+// }
 
-vector<Carrinha> testingWork(){
+// std::vector<Carrinha> testingWork(){
 
-    Carrinha e1 = Carrinha(60,60,14);
-    Carrinha e2 = Carrinha(20,30,17);
-    Carrinha e3 = Carrinha(25,10,13);
+//     Carrinha e1 = Carrinha(60,60,14);
+//     Carrinha e2 = Carrinha(20,30,17);
+//     Carrinha e3 = Carrinha(25,10,13);
 
-    vector<Carrinha> v;
-    v.push_back(e1);
-    v.push_back(e2);
-    v.push_back(e3);
+//     std::vector<Carrinha> v;
+//     v.push_back(e1);
+//     v.push_back(e2);
+//     v.push_back(e3);
     
-    return v;
-}
+//     return v;
+// }
 
-list<tuple<Encomenda,Carrinha>> cenario2(){
+int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
-    vector<Encomenda> requests = testingReq();
-    vector<Carrinha> workers = testingWork();
+    // std::vector<Encomenda> requests = testingReq();
+    // std::vector<Carrinha> workers = testingWork();
 
-    list<tuple<Encomenda,Carrinha>> solution;
+    std::list<std::tuple<Encomenda,Carrinha>> solution;
+
+    int profit = 0;
+    bool clean = false;
 
     sortRequests(&requests);
     sortWorkers(&workers);
 
-    // cout << "aqui" << endl;
+    // cout << "aqui" << std::endl;
 
     // test sorting
-    // cout << "Encomenda ratio:" << endl;
+    // std::cout << "Encomenda ratio:" << std::endl;
     // for(auto i : requests){
-    //     cout << ratio(i.getRecompensa(),i.getVolume(),i.getPeso()) << endl;
+    //     std::cout << "ola?" << std::endl;
+    //     std::cout << ratio(i.getRecompensa(),i.getVolume(),i.getPeso()) << std::endl;
     // }
-    // cout << "Custo Carrinhas:" << endl;
+    // cout << "Custo Carrinhas:" << std::endl;
     // for(auto i : workers){
-    //     cout << ratio(i.getCusto(),i.getVolMax(),i.getPesoMax()) << endl;
+    //     cout << ratio(i.getaCusto(),i.getVolMax(),i.getPesoMax()) << std::endl;
     // }
 
     unsigned int i = 0, j = 0;
-    while(i != workers.size() || j != requests.size()){
+    int pesoLeft = 0, volLeft = 0;
+    while(i < workers.size() && j < requests.size()){
 
-        cout << "Volume encomenda: " << requests[j].getVolume() << ", Volume Max: " << workers[i].getVolMax() << ", Recompensa: " << requests[j].getRecompensa() << endl;
-        cout << "Peso encomenda: " << requests[j].getPeso() << ", Peso Max: " << workers[i].getPesoMax() << endl;
+        // std::cout << "Volume encomenda: " << requests[j].getVolume() << ", Volume Max: " << workers[i].getVolMax() << ", Recompensa: " << requests[j].getRecompensa() << std::endl;
+        // std::cout << "Peso encomenda: " << requests[j].getPeso() << ", Peso Max: " << workers[i].getPesoMax() << std::endl;
 
-        if(requests[j].getVolume() <= workers[i].getVolMax() && requests[j].getPeso() <= workers[i].getPesoMax()){
-            tuple<Encomenda,Carrinha> tup = make_tuple(requests[j], workers[i]);
-            solution.push_back(tup);
+        if(clean){
+            volLeft = workers[i].getVolMax();
+            pesoLeft = workers[i].getPesoMax();
+            profit -= workers[i].getCusto();
+            clean = false;
         }
 
-        i++;
-        j++;
+        if(requests[j].getVolume() <= volLeft && requests[j].getPeso() <= pesoLeft){
+            std::tuple<Encomenda,Carrinha> tup = std::make_tuple(requests[j], workers[i]);
+            profit += requests[j].getRecompensa();
+            solution.push_back(tup);
+            pesoLeft -= requests[j].getPeso();
+            volLeft -= requests[j].getVolume();
+            // std::cout << "i: " << i << ", j: " << j << std::endl;
+            j++;
+        }
+        else{
+            clean = true;
+            i++;
+        }
+        // sleep(1);
     }
 
-    return solution;
+    return profit;
 }
 
 //just for testing
-int main(){
+// int main(){
 
-    list<tuple<Encomenda,Carrinha>> sol = cenario2();
+//     std::list<std::tuple<Encomenda,Carrinha>> sol = cenario2();
 
-    // cout << sol.size() << endl;
+//     // cout << sol.size() << std::endl;
 
-    cout << "Solução" << endl;
-    for(auto elem : sol){
-        cout << "Encomenda: "<< get<0>(elem).getRecompensa() << ", Carrinha:" << get<1>(elem).getCusto() << endl;
-    }
-}
+//     cout << "Solução" << std::endl;
+//     for(auto elem : sol){
+//         cout << "Encomenda: "<< get<0>(elem).getRecompensa() << ", Carrinha:" << get<1>(elem).getCusto() << std::endl;
+//     }
+// }
