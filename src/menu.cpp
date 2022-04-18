@@ -19,6 +19,8 @@ void Menu::showMenu(){
 void Menu::takeInput(std::vector<Carrinha> carrinhas, std::vector<Encomenda> encomendas){
     Carrinha carrinha;
     int numEstafetas;
+    double tmpMedio;
+
     while(true){
         std::cout << "Selecione a opcao: ";
         std::cin >> choice;
@@ -30,6 +32,8 @@ void Menu::takeInput(std::vector<Carrinha> carrinhas, std::vector<Encomenda> enc
             case '2':
                 break;
             case '3':
+                tmpMedio = cenario3(encomendas);
+                std::cout << "Tempo medio minimo: " << tmpMedio << std::endl;
                 break;
             case '4':
                 exit(0);
