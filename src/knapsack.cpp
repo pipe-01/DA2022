@@ -7,6 +7,7 @@
 // Space complexity : O(n)
 
 #include "knapsack.h"
+#include "utils.h"
 // #include <unistd.h>
 
 // Estafeta = volume máximo, peso máximo e custo/percentagem
@@ -24,23 +25,6 @@
 
 double ratio(int cost, int vol, int weight){
     return (double)cost/(vol+weight);
-}
-
-bool comparePayment(Encomenda x, Encomenda y){
-
-    double xAux = ratio(x.getRecompensa(),x.getVolume(),x.getPeso());
-    double yAux = ratio(y.getRecompensa(),y.getVolume(),y.getPeso());
-
-    return (xAux>yAux);
-}
-
-bool compareCost(Carrinha x, Carrinha y){
-
-
-    double xAux = ratio(x.getCusto(),x.getVolMax(),x.getPesoMax());
-    double yAux = ratio(y.getCusto(),y.getVolMax(),y.getPesoMax());
-
-    return (xAux<yAux);
 }
 
 void sortRequests(std::vector<Encomenda> *requests){

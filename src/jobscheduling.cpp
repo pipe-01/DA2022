@@ -1,9 +1,5 @@
 #include "jobscheduling.h"
-
-bool compareTime(Encomenda a, Encomenda b)
-{
-     return (a.getDuracao() < b.getDuracao());
-}
+#include "utils.h"
 
 double cenario3(std::vector<Encomenda> encomendas){
     int totalTime = 0;
@@ -24,8 +20,6 @@ double cenario3(std::vector<Encomenda> encomendas){
     }
 
     //printVector(entregas);
-
-    //std::cout << totalTime << " " << entregas.size() << std::endl;
 
     return (double)totalTime/entregas.size();
 }

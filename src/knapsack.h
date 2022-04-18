@@ -12,10 +12,6 @@
 
 double ratio(int cost, int vol, int weight);
 
-bool comparePayment(Encomenda x, Encomenda y);
-
-bool compareCost(Carrinha x, Carrinha y);
-
 void sortRequests(std::vector<Encomenda> *requests);
 
 void sortWorkers(std::vector<Carrinha> *workers);
