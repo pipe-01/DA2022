@@ -49,12 +49,12 @@ int Carrinha::minNumEstafetas(std::vector<Carrinha> carrinhas, std::vector<Encom
     int numEstafetas = 0;
     sort(carrinhas.begin(), carrinhas.end(), cmpCarrinhas);
     sort(encomendas.begin(), encomendas.end(), cmpEncomenda);
-    for (int i = 0; i < carrinhas.size(); i++){
+    for (unsigned int i = 0; i < carrinhas.size(); i++){
         if (encomendas.empty()){
             return numEstafetas;
         }
         numEstafetas++;
-        for (int j = 0; j < encomendas.size(); j++){
+        for (unsigned int j = 0; j < encomendas.size(); j++){
             if (encomendas[j].getPeso() > carrinhas[i].pesoMax || encomendas[j].getVolume() > carrinhas[i].volMax){
                 continue;
             }
