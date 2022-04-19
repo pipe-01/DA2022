@@ -1,8 +1,5 @@
 #include "menu.h"
-#include "carrinha.h"
-#include "File.h"
-#include "jobscheduling.h"
-#include "knapsack.h"
+
 
 Menu::Menu(){}
 
@@ -18,7 +15,6 @@ void Menu::showMenu(){
 }
 
 void Menu::takeInput(std::vector<Carrinha> carrinhas, std::vector<Encomenda> encomendas){
-    Carrinha carrinha;
     int numEstafetas;
     double tmpMedio;
     int profit;
@@ -28,12 +24,12 @@ void Menu::takeInput(std::vector<Carrinha> carrinhas, std::vector<Encomenda> enc
         std::cin >> choice;
         switch (choice) {
             case '1':
-                numEstafetas = carrinha.minNumEstafetas(carrinhas, encomendas);
-                std::cout << "Numero minimo de estafetas: " + std::to_string(numEstafetas) << std::endl;
+                numEstafetas = cenario1(carrinhas, encomendas);
+                std::cout << "Numero minimo de estafetas: " << numEstafetas << std::endl;
                 break;
             case '2':
                 profit = cenario2(encomendas,carrinhas);
-                std::cout << "profit: " << profit << std::endl;
+                std::cout << "Lucro maximizado: " << profit << std::endl;
                 break;
             case '3':
                 tmpMedio = cenario3(encomendas);

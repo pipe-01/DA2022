@@ -3,24 +3,15 @@
 #include <vector>
 #include "File.h"
 #include "encomenda.h"
+#include "utils.h"
 
 #define MAXHOURS 28800
 
 /**
- * @brief 
- * 
- * @param a 
- * @param b 
- * @return true 
- * @return false 
- */
-bool compareTime(Encomenda a, Encomenda b);
-
-/**
- * @brief 
- * 
- * @param encomendas 
- * @return double 
+ * @brief
+ *
+ * @param encomendas
+ * @return double
  */
 double cenario3(std::vector<Encomenda> encomendas);
 

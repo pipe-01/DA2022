@@ -4,6 +4,10 @@
 #include <iostream>
 #include <string>
 #include "File.h"
+#include "jobscheduling.h"
+#include "knapsack.h"
+#include "binpacking.h"
+#include "utils.h"
 
 class Menu {
 

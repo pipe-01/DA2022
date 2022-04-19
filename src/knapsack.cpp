@@ -22,34 +22,34 @@
 
 //ratio = custo/(vol+peso)
 
-double ratio(int cost, int vol, int weight){
-    return (double)cost/(vol+weight);
-}
+// double ratio(int cost, int vol, int weight){
+//     return (double)cost/(vol+weight);
+// }
 
-bool comparePayment(Encomenda x, Encomenda y){
+// bool comparePayment(Encomenda x, Encomenda y){
 
-    double xAux = ratio(x.getRecompensa(),x.getVolume(),x.getPeso());
-    double yAux = ratio(y.getRecompensa(),y.getVolume(),y.getPeso());
+//     double xAux = ratio(x.getRecompensa(),x.getVolume(),x.getPeso());
+//     double yAux = ratio(y.getRecompensa(),y.getVolume(),y.getPeso());
 
-    return (xAux>yAux);
-}
+//     return (xAux>yAux);
+// }
 
-bool compareSize(Encomenda x, Encomenda y){
-    return x.getPeso()+x.getVolume()<y.getPeso()+y.getVolume();
-}
+// bool compareSize(Encomenda x, Encomenda y){
+//     return x.getPeso()+x.getVolume()<y.getPeso()+y.getVolume();
+// }
 
-bool compareWorkerSize(Carrinha x, Carrinha y){
-    return x.getPesoMax()+x.getVolMax()>y.getPesoMax()+y.getVolMax();
-}
+// bool compareWorkerSize(Carrinha x, Carrinha y){
+//     return x.getPesoMax()+x.getVolMax()>y.getPesoMax()+y.getVolMax();
+// }
 
-bool compareCost(Carrinha x, Carrinha y){
+// bool compareCost(Carrinha x, Carrinha y){
 
 
-    double xAux = ratio(x.getCusto(),x.getVolMax(),x.getPesoMax());
-    double yAux = ratio(y.getCusto(),y.getVolMax(),y.getPesoMax());
+//     double xAux = ratio(x.getCusto(),x.getVolMax(),x.getPesoMax());
+//     double yAux = ratio(y.getCusto(),y.getVolMax(),y.getPesoMax());
 
-    return (xAux<yAux);
-}
+//     return (xAux<yAux);
+// }
 
 void sortRequests(std::vector<Encomenda> *requests){
 
