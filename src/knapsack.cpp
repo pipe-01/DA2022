@@ -34,6 +34,14 @@ bool comparePayment(Encomenda x, Encomenda y){
     return (xAux>yAux);
 }
 
+bool compareSize(Encomenda x, Encomenda y){
+    return x.getPeso()+x.getVolume()<y.getPeso()+y.getVolume();
+}
+
+bool compareWorkerSize(Carrinha x, Carrinha y){
+    return x.getPesoMax()+x.getVolMax()>y.getPesoMax()+y.getVolMax();
+}
+
 bool compareCost(Carrinha x, Carrinha y){
 
 
@@ -46,11 +54,13 @@ bool compareCost(Carrinha x, Carrinha y){
 void sortRequests(std::vector<Encomenda> *requests){
 
     sort(requests->begin(), requests->end(), comparePayment);
+    // sort(requests->begin(), requests->end(), compareSize);
 }
 
 void sortWorkers(std::vector<Carrinha> *workers){
 
     sort(workers->begin(), workers->end(), compareCost);
+    // sort(workers->begin(), workers->end(), compareWorkerSize);
 }
 
 // std::vector<Encomenda> testingReq(){
@@ -81,13 +91,24 @@ void sortWorkers(std::vector<Carrinha> *workers){
 //     return v;
 // }
 
+// int forceCenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
+
+//     std::list<std::list<Encomenda>> sol;
+
+//     for()
+    
+// }
+
 int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
     // std::vector<Encomenda> requests = testingReq();
     // std::vector<Carrinha> workers = testingWork();
 
     std::list<std::tuple<Encomenda,Carrinha>> solution;
+    std::list<int> save;
 
+    // int left =
+    
     int profit = 0;
     bool clean = false;
 
@@ -109,6 +130,10 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
     unsigned int i = 0, j = 0;
     int pesoLeft = 0, volLeft = 0;
+
+    //when a request is impossible to carry:
+    int count = 0;
+
     while(i < workers.size() && j < requests.size()){
 
         // std::cout << "Volume encomenda: " << requests[j].getVolume() << ", Volume Max: " << workers[i].getVolMax() << ", Recompensa: " << requests[j].getRecompensa() << std::endl;
@@ -119,9 +144,11 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
             pesoLeft = workers[i].getPesoMax();
             profit -= workers[i].getCusto();
             clean = false;
+            count++;
         }
 
         if(requests[j].getVolume() <= volLeft && requests[j].getPeso() <= pesoLeft){
+            count = 0;
             std::tuple<Encomenda,Carrinha> tup = std::make_tuple(requests[j], workers[i]);
             profit += requests[j].getRecompensa();
             solution.push_back(tup);
@@ -131,8 +158,14 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
             j++;
         }
         else{
-            clean = true;
-            i++;
+            if(count == 2){
+                count = 0;
+                j++;
+            }
+            else{
+                clean = true;
+                i++;
+            }
         }
         // sleep(1);
     }
