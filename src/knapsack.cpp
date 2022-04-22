@@ -89,18 +89,17 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
     // }
 
     // delete non profit workers
-    for(int m = 0; m<sol.size(); m++){
+    for(unsigned int m = 0; m<sol.size(); m++){
 
         nonProfit.push_back(-workers[m].getCusto());
 
-        std::cout << "Worker Cost " << m << ": " << workers[m].getCusto() << std::endl;
-        std::cout << "Current Profit: " << nonProfit[m] << std::endl;
+        // std::cout << "Worker Cost " << m << ": " << workers[m].getCusto() << std::endl;
+        // std::cout << "Current Profit: " << nonProfit[m] << std::endl;
 
-        for(int n = 0; n<sol[m].size(); n++){
+        for(unsigned int n = 0; n<sol[m].size(); n++){
             nonProfit[m] += sol[m][n].getRecompensa();
         }
-
-        std::cout << "Current Profit2: " << nonProfit[m] << std::endl;
+        // std::cout << "Current Profit2: " << nonProfit[m] << std::endl;
         
         if(nonProfit[m] < 0){
         //remove
