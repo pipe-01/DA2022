@@ -72,7 +72,11 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
             sol.push_back(aux);
             i++;
         }
+        if(j+1 == requests.size()){
+            sol.push_back(aux);
+        }
     }
+
 
     std::vector<int> nonProfit;
 
@@ -89,14 +93,14 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
         nonProfit.push_back(-workers[m].getCusto());
 
-        // std::cout << "Worker Cost: " << workers[m].getCusto() << std::endl;
-        // std::cout << "Current Profit: " << nonProfit[m] << std::endl;
+        std::cout << "Worker Cost " << m << ": " << workers[m].getCusto() << std::endl;
+        std::cout << "Current Profit: " << nonProfit[m] << std::endl;
 
         for(int n = 0; n<sol[m].size(); n++){
             nonProfit[m] += sol[m][n].getRecompensa();
         }
 
-        // std::cout << "Current Profit2: " << nonProfit[m] << std::endl;
+        std::cout << "Current Profit2: " << nonProfit[m] << std::endl;
         
         if(nonProfit[m] < 0){
         //remove
