@@ -4,8 +4,8 @@
 int main() {
     File file;
 
-    std::vector<Carrinha> carrinhas = file.readAndParseCar("C:\\Users\\ASUS\\PROJETODA\\DA2022\\src\\carrinhas.txt");
-    std::vector<Encomenda> encomendas = file.readAndParseEnc("C:\\Users\\ASUS\\PROJETODA\\DA2022\\src\\encomendas.txt");
+    std::vector<Carrinha> carrinhas = file.readAndParseCar("carrinhas.txt");
+    std::vector<Encomenda> encomendas = file.readAndParseEnc("encomendas.txt");
 
     Menu menu;
     menu.showMenu();
