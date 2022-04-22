@@ -16,7 +16,7 @@ void Menu::showMenu(){
 
 void Menu::takeInput(std::vector<Carrinha> carrinhas, std::vector<Encomenda> encomendas){
     int numEstafetas;
-    double tmpMedio;
+    double numEncomendasExpresso;
     int profit;
 
     while(true){
@@ -25,15 +25,15 @@ void Menu::takeInput(std::vector<Carrinha> carrinhas, std::vector<Encomenda> enc
         switch (choice) {
             case '1':
                 numEstafetas = cenario1(carrinhas, encomendas);
-                std::cout << "Numero minimo de estafetas: " << numEstafetas << std::endl;
+                std::cout << "Foram usados um total de " << numEstafetas << " estafetas para a entrega das " << encomendas.size() << " encomendas" << std::endl;
                 break;
             case '2':
                 profit = cenario2(encomendas,carrinhas);
-                std::cout << "Lucro maximizado: " << profit << std::endl;
+                std::cout << "Lucro maximizado para a entrega das " << encomendas.size() << " corresponde a um valor de " << profit << std::endl;
                 break;
             case '3':
-                tmpMedio = cenario3(encomendas);
-                std::cout << "Tempo medio minimo: " << tmpMedio << std::endl;
+                numEncomendasExpresso = cenario3(encomendas);
+                std::cout << "Foram alocadas " << numEncomendasExpresso << " encomendas numa carrinha" << std::endl;
                 break;
             case '4':
                 exit(0);

@@ -1,20 +1,14 @@
-// Time complexity : O(nlog(n))
-// Space complexity : O(n)
 #include "knapsack.h"
-
 
 void sortRequests(std::vector<Encomenda> *requests){
 
     sort(requests->begin(), requests->end(), comparePayment);
-    // sort(requests->begin(), requests->end(), compareSize);
 }
 
 void sortWorkers(std::vector<Carrinha> *workers){
 
     sort(workers->begin(), workers->end(), compareCost);
-    // sort(workers->begin(), workers->end(), compareWorkerSize);
 }
-
 
 int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
@@ -28,18 +22,6 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
     sortRequests(&requests);
     sortWorkers(&workers);
 
-    // cout << "aqui" << std::endl;
-
-    // test sorting
-    // std::cout << "Encomenda ratio:" << std::endl;
-    // for(auto i : requests){
-    //     std::cout << ratio(i.getRecompensa(),i.getVolume(),i.getPeso()) << std::endl;
-    // }
-    // cout << "Custo Carrinhas:" << std::endl;
-    // for(auto i : workers){
-    //     cout << ratio(i.getaCusto(),i.getVolMax(),i.getPesoMax()) << std::endl;
-    // }
-
     unsigned int i = 0, j = 0;
     int pesoLeft = 0, volLeft = 0;
 
@@ -47,9 +29,6 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
     std::vector<Encomenda> aux;
 
     while(i < workers.size() && j < requests.size()){
-
-        // std::cout << "Volume encomenda: " << requests[j].getVolume() << ", Volume Max: " << workers[i].getVolMax() << ", Recompensa: " << requests[j].getRecompensa() << std::endl;
-        // std::cout << "Peso encomenda: " << requests[j].getPeso() << ", Peso Max: " << workers[i].getPesoMax() << std::endl;
 
         if(clean){
             aux.clear();
@@ -64,7 +43,6 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
             profit += requests[j].getRecompensa();
             pesoLeft -= requests[j].getPeso();
             volLeft -= requests[j].getVolume();
-            // std::cout << "i: " << i << ", j: " << j << std::endl;
             j++;
         }
         else{
@@ -80,29 +58,15 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
     std::vector<int> nonProfit;
 
-    // for(int i = 0; i<sol.size();i++){
-    //     std::cout << "Encomendas Carinha " << i << ":" << std::endl;
-    //     for(int j = 0; j<sol[i].size(); j++){
-    //         std::cout << j << ", ";
-    //     }
-    //     std::cout << std::endl;
-    // }
-
-    // delete non profit workers
     for(unsigned int m = 0; m<sol.size(); m++){
 
         nonProfit.push_back(-workers[m].getCusto());
 
-        // std::cout << "Worker Cost " << m << ": " << workers[m].getCusto() << std::endl;
-        // std::cout << "Current Profit: " << nonProfit[m] << std::endl;
-
         for(unsigned int n = 0; n<sol[m].size(); n++){
             nonProfit[m] += sol[m][n].getRecompensa();
         }
-        // std::cout << "Current Profit2: " << nonProfit[m] << std::endl;
         
         if(nonProfit[m] < 0){
-        //remove
             profit -= nonProfit[m];
         }
     }

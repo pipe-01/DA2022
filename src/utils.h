@@ -1,8 +1,6 @@
 #ifndef PROJETODA_UTILS_H
 #define PROJETODA_UTILS_H
 
-// double ratio(int cost, int vol, int weight);
-
 /**
 * este método fornece uma relação entre um valor e a soma de outros dois valores
 *

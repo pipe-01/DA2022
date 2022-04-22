@@ -9,10 +9,6 @@
 #include "carrinha.h"
 #include "utils.h"
 
-// using namespace std;
-
-// double ratio(int cost, int vol, int weight);
-
 /**
 * este método ordena um vetor de encomendas por ordem decrescente de recompensa / (peso + volume)
 *
@@ -38,7 +34,3 @@ void sortWorkers(std::vector<Carrinha> *workers);
 * @return int lucro máximo
 */
 int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers);
-
-// bool comparePayment(Encomenda x, Encomenda y);
-
-// bool compareCost(Carrinha x, Carrinha y);

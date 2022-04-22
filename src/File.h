@@ -33,13 +33,6 @@ public:
     */
     vector<Encomenda> readAndParseEnc(string path);
 
-    /*vector<Carrinha> getCarrinhas();
-
-    vector<Encomenda> getEncomendas();*/
-
-    void printCarrinhas();
-
-    void printEncomendas();
 };
 
 

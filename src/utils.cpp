@@ -2,10 +2,6 @@
 #include "carrinha.h"
 #include "knapsack.h"
 
-// double ratio(int cost, int vol, int weight){
-//     return (double)cost/(vol+weight);
-// }
-
 bool compareTime(const Encomenda &e1, const Encomenda &e2)
 {
     return (e1.getDuracao() < e2.getDuracao());
@@ -18,9 +14,6 @@ bool cmpEncomenda(const Encomenda &e1, const Encomenda &e2){
 bool cmpCarrinhas(const Carrinha &c1, const Carrinha &c2){
     return c2.getPesoMax() < c1.getPesoMax();
 }
-
-
-//ratio = custo/(vol+peso)
 
 double ratio(int cost, int vol, int weight){
     return (double)cost/(vol+weight);

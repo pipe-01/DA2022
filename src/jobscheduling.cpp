@@ -18,16 +18,5 @@ double cenario3(std::vector<Encomenda> encomendas){
         }
     }
 
-    //printVector(entregas);
-
-    return (double)totalTime/entregas.size();
-}
-
-
-void printVector(std::vector<Encomenda> array){
-    for(auto aux: array){
-        std::cout << "volume: " << aux.getVolume() << " peso: " << aux.getPeso() << " duracao: " << aux.getDuracao() << std::endl;
-    }
-
-    std::cout << "tamanho " << array.size() << std::endl;
+    return entregas.size();
 }
