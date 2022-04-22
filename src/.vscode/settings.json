@@ -45,6 +45,12 @@
         "bit": "cpp",
         "cctype": "cpp",
         "clocale": "cpp",
-        "ctime": "cpp"
+        "ctime": "cpp",
+        "algorithm": "cpp",
+        "iomanip": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp"
     }
 }

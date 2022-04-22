@@ -19,6 +19,9 @@ bool cmpCarrinhas(const Carrinha &c1, const Carrinha &c2){
     return c2.getPesoMax() < c1.getPesoMax();
 }
 
+
+//ratio = custo/(vol+peso)
+
 double ratio(int cost, int vol, int weight){
     return (double)cost/(vol+weight);
 }

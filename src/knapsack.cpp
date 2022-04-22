@@ -7,49 +7,7 @@
 // Space complexity : O(n)
 
 #include "knapsack.h"
-// #include <unistd.h>
 
-// Estafeta = volume máximo, peso máximo e custo/percentagem
-// Encomenda = Volume, peso e recompensa    
-
-
-//ordenar os pagamentos dos estafetas por ordem crescente
-// escolher o primeiro
-// ordem decrescente de profit
-// ver se e viavel
-// se nao for exclui solução
-// se for adiciona e passa ao seguinte
-
-//ratio = custo/(vol+peso)
-
-// double ratio(int cost, int vol, int weight){
-//     return (double)cost/(vol+weight);
-// }
-
-// bool comparePayment(Encomenda x, Encomenda y){
-
-//     double xAux = ratio(x.getRecompensa(),x.getVolume(),x.getPeso());
-//     double yAux = ratio(y.getRecompensa(),y.getVolume(),y.getPeso());
-
-//     return (xAux>yAux);
-// }
-
-// bool compareSize(Encomenda x, Encomenda y){
-//     return x.getPeso()+x.getVolume()<y.getPeso()+y.getVolume();
-// }
-
-// bool compareWorkerSize(Carrinha x, Carrinha y){
-//     return x.getPesoMax()+x.getVolMax()>y.getPesoMax()+y.getVolMax();
-// }
-
-// bool compareCost(Carrinha x, Carrinha y){
-
-
-//     double xAux = ratio(x.getCusto(),x.getVolMax(),x.getPesoMax());
-//     double yAux = ratio(y.getCusto(),y.getVolMax(),y.getPesoMax());
-
-//     return (xAux<yAux);
-// }
 
 void sortRequests(std::vector<Encomenda> *requests){
 
@@ -91,13 +49,18 @@ void sortWorkers(std::vector<Carrinha> *workers){
 //     return v;
 // }
 
-// int forceCenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
-//     std::list<std::list<Encomenda>> sol;
+int sol2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
-//     for()
-    
-// }
+    unsigned int profit = 0;
+
+
+    for(unsigned int i = 0; i<workers.size(); i++){
+
+    }
+
+    return profit;
+}
 
 int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
@@ -107,7 +70,6 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
     std::list<std::tuple<Encomenda,Carrinha>> solution;
     std::list<int> save;
 
-    // int left =
     
     int profit = 0;
     bool clean = false;
@@ -120,7 +82,6 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
     // test sorting
     // std::cout << "Encomenda ratio:" << std::endl;
     // for(auto i : requests){
-    //     std::cout << "ola?" << std::endl;
     //     std::cout << ratio(i.getRecompensa(),i.getVolume(),i.getPeso()) << std::endl;
     // }
     // cout << "Custo Carrinhas:" << std::endl;
@@ -134,12 +95,16 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
     //when a request is impossible to carry:
     int count = 0;
 
+    std::vector<std::vector<Encomenda>> sol;
+    std::vector<Encomenda> aux;
+
     while(i < workers.size() && j < requests.size()){
 
         // std::cout << "Volume encomenda: " << requests[j].getVolume() << ", Volume Max: " << workers[i].getVolMax() << ", Recompensa: " << requests[j].getRecompensa() << std::endl;
         // std::cout << "Peso encomenda: " << requests[j].getPeso() << ", Peso Max: " << workers[i].getPesoMax() << std::endl;
 
         if(clean){
+            aux.clear();
             volLeft = workers[i].getVolMax();
             pesoLeft = workers[i].getPesoMax();
             profit -= workers[i].getCusto();
@@ -149,25 +114,50 @@ int cenario2(std::vector<Encomenda> requests, std::vector<Carrinha> workers){
 
         if(requests[j].getVolume() <= volLeft && requests[j].getPeso() <= pesoLeft){
             count = 0;
-            std::tuple<Encomenda,Carrinha> tup = std::make_tuple(requests[j], workers[i]);
+            // std::tuple<Encomenda,Carrinha> tup = std::make_tuple(requests[j], workers[i]);
+            aux.push_back(requests[j]);
             profit += requests[j].getRecompensa();
-            solution.push_back(tup);
+            // solution.push_back(tup);
             pesoLeft -= requests[j].getPeso();
             volLeft -= requests[j].getVolume();
             // std::cout << "i: " << i << ", j: " << j << std::endl;
             j++;
         }
         else{
-            if(count == 2){
-                count = 0;
-                j++;
-            }
-            else{
-                clean = true;
-                i++;
-            }
+            clean = true;
+            sol.push_back(aux);
+            i++;
         }
-        // sleep(1);
+    }
+
+    std::vector<int> nonProfit;
+
+    for(int i = 0; i<sol.size();i++){
+        std::cout << "Encomendas Carinha " << i << ":" << std::endl;
+        for(int j = 0; j<sol[i].size(); j++){
+            std::cout << j << ", ";
+        }
+        std::cout << std::endl;
+    }
+
+    // delete non profit workers
+    for(int m = 0; m<sol.size(); m++){
+
+        nonProfit.push_back(-workers[m].getCusto());
+
+        // std::cout << "Worker Cost: " << workers[m].getCusto() << std::endl;
+        // std::cout << "Current Profit: " << nonProfit[m] << std::endl;
+
+        for(int n = 0; n<sol[m].size(); n++){
+            nonProfit[m] += sol[m][n].getRecompensa();
+        }
+
+        // std::cout << "Current Profit2: " << nonProfit[m] << std::endl;
+        
+        if(nonProfit[m] < 0){
+        //remove
+            profit -= nonProfit[m];
+        }
     }
 
     return profit;
