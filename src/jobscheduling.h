@@ -8,16 +8,18 @@
 #define MAXHOURS 28800
 
 /**
- * @brief
+ * este método fornece as encomendas expresso que foram possíveis entregar tendo em conta a limitação de tempo
  *
- * @param encomendas
- * @return double
+ * @param encomendas vetor de encomendas
+ * @return double número de encomendas
  */
+
 double cenario3(std::vector<Encomenda> encomendas);
 
 /**
- * @brief 
- * 
- * @param array 
+ * @brief
+ *
+ * @param array
  */
+
 void printVector(std::vector<Encomenda> array);
