@@ -2,15 +2,18 @@
 #include <fstream>
 #include <string.h>
 #include <cstring>
-#include "graph.h"
+#include <fstream>
+#include "Graph.h"
+#include "queue"
 
 
 int main(){
-    ifstream data;
+    std::ifstream data;
     int fileNum;
     int nNodes, nEdges;
-    string filename = "Tests/in";
-    int orig, dest, cap, dur;
+    std::string filename = "Tests/in";
+    int orig, dest, dur;
+    double cap;
 
     std::cout << "Please select the file you want to test (1 <= x <= 10)" << std::endl;
     while(true){
@@ -25,22 +28,32 @@ int main(){
     if(fileNum < 10){
         filename += "0";
     }
-    filename += to_string(fileNum) + ".txt";
+    filename += std::to_string(fileNum) + ".txt";
 
-    data.open(filename, ios::in);
+    data.open(filename, std::ios::in);
     if(!data){
         std::cout << "Can't open file" << std::endl;
     }
     data >> nNodes >> nEdges;
     std::cout << "Nodes: " << nNodes << " " << "Edges: " << nEdges << std::endl; //debug
-    Graph graph(nNodes, true);
-
+    //Graph graph(nNodes, true);
+    Graph<int> graph;
+    
+    for (int i = 1; i <= nNodes; i++){
+        graph.addVertex(i);
+    }
+    
     for (int i = 0; i < nEdges; i++){
         data >> orig >> dest >> cap >> dur;
-        graph.addEdge(orig, dest, cap, dur);
+        graph.addEdge(orig, dest, cap);
         //cout << "orig: " << orig << " Duraçao: " << dest << " Capacidade: " << cap << " Duração: " << dur << std::endl; //debug
     }
-    graph.printGraph();
+
+    int origem, destino;
+    std::cout << "Enter origem and destino" << std::endl;
+    std::cin >> origem >> destino;
+
+    
 
     return 0;
 }
