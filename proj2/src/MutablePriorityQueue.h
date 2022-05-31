@@ -11,8 +11,6 @@
 
 #include <vector>
 
-
-
 /**
  * class T must have: (i) accessible field int queueIndex; (ii) operator< defined.
  */

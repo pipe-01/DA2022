@@ -237,31 +237,6 @@ void Graph<T>::dijkstraShortestPath(const T &origin) {
 }
 
 template<class T>
-void Graph<T>::maxCapacity(const T &origin) {
-    vector<int> pai;
-    vector<int> cap;
-    MutablePriorityQueue<Vertex<T>> q;
-    for(int i = 1; i <= getNumVertex(); i++){
-        pai[i] = NULL;
-        cap[i] = 0;
-    }
-    cap[origin] = INT_MAX;
-    q.insert(s);
-    while(!q.empty()){
-        auto v = q.extractMax();
-        for (auto e : v->adj){
-            if(min(cap[v] ) > cap[e]){
-                cap[e] = min(cap[v], c(v, e));
-                pai[e] = v;
-                q.increaseKey();
-            }
-        }
-        
-    }
-
-}
-
-template<class T>
 void Graph<T>::unweightedShortestPath(const T &orig) {
     auto s = initSingleSource(orig);
     std::queue< Vertex<T>* > q;
