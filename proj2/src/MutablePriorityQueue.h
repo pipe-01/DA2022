@@ -1,13 +1,9 @@
-/*
- * MutablePriorityQueue.h
- * A simple implementation of mutable priority queues, required by Dijkstra algorithm.
- *
- * Created on: 17/03/2018
- *      Author: João Pascoal Faria
- */
+//
+// Created by ASUS on 31/05/2022.
+//
 
-#ifndef SRC_MUTABLEPRIORITYQUEUE_H_
-#define SRC_MUTABLEPRIORITYQUEUE_H_
+#ifndef PROJETODA3_MUTABLEPRIORITYQUEUE_H
+#define PROJETODA3_MUTABLEPRIORITYQUEUE_H
 
 #include <vector>
 
@@ -27,6 +23,7 @@ public:
     T * extractMin();
     void decreaseKey(T * x);
     bool empty();
+    T * remove();
 };
 
 // Index calculations
@@ -59,6 +56,12 @@ template <class T>
 void MutablePriorityQueue<T>::insert(T *x) {
     H.push_back(x);
     heapifyUp(H.size()-1);
+}
+
+template <class T>
+T * MutablePriorityQueue<T>::remove() {
+    H.erase(H.begin());
+    return *H.begin();
 }
 
 template <class T>
@@ -99,4 +102,5 @@ void MutablePriorityQueue<T>::set(unsigned i, T * x) {
     x->queueIndex = i;
 }
 
-#endif /* SRC_MUTABLEPRIORITYQUEUE_H_ */
+
+#endif //PROJETODA3_MUTABLEPRIORITYQUEUE_H

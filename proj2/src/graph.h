@@ -1,8 +1,5 @@
-/*
- * Graph.h
- */
-#ifndef GRAPH_H_
-#define GRAPH_H_
+#ifndef PROJETODA3_GRAPH_H
+#define PROJETODA3_GRAPH_H
 
 #include <iostream>
 #include <vector>
@@ -121,6 +118,9 @@ public:
     // FP03B - All-pair shortest path -  Dynamic Programming - Floyd-Warshall
     void floydWarshallShortestPath(); //TODO...
     std::vector<T> getfloydWarshallPath(const T &origin, const T &dest) const; //TODO...
+    void widestPath(T &src, T &destin);
+    bool relaxWidestPath(Vertex<T> *v, Vertex<T> *w, double weight);
+    void bfs(T &src, T &destin);
 };
 
 
@@ -259,7 +259,12 @@ void Graph<T>::bellmanFordShortestPath(const T &orig) {
 template<class T>
 std::vector<T> Graph<T>::getPath(const T &origin, const T &dest) const{
     std::vector<T> res;
-    // TODO implement this
+    Vertex<T> *a = findVertex(dest);
+    while (a != nullptr){
+        res.push_back(a->info);
+        a = a->path;
+    }
+    std::reverse(res.begin(), res.end());
     return res;
 }
 
@@ -295,5 +300,120 @@ std::vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) cons
     return res;
 }
 
+template<class T>
+void Graph<T>::widestPath(T &src, T &destin) {
+    for (auto v: vertexSet){
+        v->dist = -1;
+        v->path = nullptr;
+    }
+    auto srcVertex = findVertex(src);
+    srcVertex->dist = INF;
 
-#endif /* GRAPH_H_ */
+    MutablePriorityQueue<Vertex<T>> q;
+    q.insert(srcVertex);
+    while (!q.empty()){
+        auto vertex = q.extractMin();
+        for (auto e: vertex->adj){
+            auto oldDist = e.dest->dist;
+            if (relaxWidestPath(vertex, e.dest, e.weight)){
+                if (oldDist == -1) {
+                    q.insert(e.dest);
+                }
+                else {
+                    q.decreaseKey(e.dest);
+                }
+            }
+        }
+    }
+
+    std::vector<T> path = getPath(src, destin);
+
+    for (int i = 0; i < path.size(); i++){
+        std::cout << path[i] << std::endl;
+    }
+}
+
+template <class T>
+bool Graph<T>::relaxWidestPath(Vertex<T> *v, Vertex<T> *w, double weight){
+    if (std::min(v->dist, weight) > w->dist){
+        w->dist = std::min(v->dist, weight);
+        w->path = v;
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
+template <class T>
+void Graph<T>::bfs(T &src, T &destin){
+    for (auto v: vertexSet){
+        v->visited = false;
+        v->dist = INF;
+        v->path = nullptr;
+    }
+
+    auto srcVertex = findVertex(src);
+    srcVertex->visited = true;
+    srcVertex->dist = 0;
+    int cap = 0;
+
+    MutablePriorityQueue<Vertex<T>> q;
+    q.insert(srcVertex);
+
+    while (!q.empty()){
+        Vertex<T> *vertex = q.remove();
+        for (auto e: vertex->adj){
+            if (!e.dest->visited){
+                q.insert(e.dest);
+                e.dest->visited = true;
+                e.dest->path = vertex;
+            }
+        }
+    }
+
+    std::vector<T> path = getPath(src, destin);
+
+    for (int i = 0; i < path.size(); i++){
+        std::cout << path[i] << std::endl;
+    }
+
+}
+
+
+//fazer bfs para descobrir caminho com menos transbordos
+
+#endif //PROJETODA3_GRAPH_H
+
+
+/*
+int cap[nodes.size()];
+bool pai[nodes.size()];
+
+for (int i = 1; i < nodes.size(); i++){
+cap[i] = -1;
+pai[i] = false;
+}
+
+cap[src] = INT_MAX;
+
+MinHeap<int, int> heap(nodes.size(), - 1);
+
+heap.insert(src, -cap[src]);
+
+while (heap.getSize() > 0){
+pair<int, int> pair = heap.removeMin();
+int vertex = pair.first;
+if (cap[vertex] == -1){
+break;
+}
+
+for (auto edge: nodes[vertex].adj){
+if (min(cap[vertex], edge.capacity) > cap[edge.dest]){
+cap[edge.dest] = min(cap[vertex], edge.capacity);
+pai[edge.dest] = vertex;
+heap.decreaseKey(edge.dest, -cap[edge.dest]);
+}
+}
+}*/

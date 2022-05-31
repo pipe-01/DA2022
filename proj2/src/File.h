@@ -1,37 +1,16 @@
-#ifndef PROJETODA_FILE_H
-#define PROJETODA_FILE_H
-#include <vector>
-#include <iostream>
+#ifndef PROJETODA3_FILE_H
+#define PROJETODA3_FILE_H
 
-using namespace std;
+
+#include "graph.h"
 
 class File {
-private:
-    vector<Carrinha> carrinhas;
-    vector<Encomenda> encomendas;
-
 
 public:
     File();
-
-    /**
-    * este método fornece um vetor das carrinhas disponíveis
-    *
-    * @param path nome do ficheiro de texto com os dados das carrinhas
-    * @return vetor de carrinhas
-    */
-    vector<Carrinha> readAndParseCar(string path);
-
-
-    /**
-    * este método fornece um vetor das encomendas a entregar
-    *
-    * @param path nome do ficheiro de texto com os dados das encomendas
-    * @return vetor de encomendas
-    */
-    vector<Encomenda> readAndParseEnc(string path);
+    void buildGraph(Graph<int> &graph);
 
 };
 
 
-#endif
+#endif //PROJETODA3_FILE_H
