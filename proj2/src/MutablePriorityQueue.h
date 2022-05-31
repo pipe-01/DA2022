@@ -102,5 +102,4 @@ void MutablePriorityQueue<T>::set(unsigned i, T * x) {
     x->queueIndex = i;
 }
 
-
 #endif //PROJETODA3_MUTABLEPRIORITYQUEUE_H

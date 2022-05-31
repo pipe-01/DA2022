@@ -29,7 +29,7 @@ void File::buildGraph(Graph<int> &graph) {
         filename += "C:\\Users\\ASUS\\PROJETODA3\\in" + std::to_string(fileNum) + ".txt";
     }
 
-    //std::cout << filename << std::endl;
+    std::cout << filename << std::endl;
 
     data.open(filename, std::ios::in);
     if(!data){
@@ -43,9 +43,8 @@ void File::buildGraph(Graph<int> &graph) {
     }
 
     for (int i = 0; i < nEdges; i++){
-        data >> orig >> dest >> cap;
+        data >> orig >> dest >> cap >> dur;
         graph.addEdge(orig, dest, cap);
         //cout << "orig: " << orig << " Duraçao: " << dest << " Capacidade: " << cap << " Duração: " << dur << std::endl; //debug
     }
-
 }
