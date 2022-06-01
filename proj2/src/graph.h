@@ -6,6 +6,7 @@
 #include <queue>
 #include <limits>
 #include <algorithm>
+#include <stack>
 #include "MutablePriorityQueue.h"
 
 template <class T> class Edge;
@@ -24,6 +25,9 @@ class Vertex {
     double dist = 0;
     Vertex<T> *path = nullptr;
     int queueIndex = 0; 		// required by MutablePriorityQueue
+    int grau = 0;
+    int earliestStart = 0;
+
 
     void addEdge(Vertex<T> *dest, double w);
 
@@ -121,6 +125,7 @@ public:
     void widestPath(T &src, T &destin);
     bool relaxWidestPath(Vertex<T> *v, Vertex<T> *w, double weight);
     void bfs(T &src, T &destin);
+    int cpmES();
 };
 
 
@@ -381,6 +386,56 @@ void Graph<T>::bfs(T &src, T &destin){
 
 }
 
+template <class T>
+int Graph<T>::cpmES(){
+
+    int durMin;
+    MutablePriorityQueue<Vertex<T>> q;
+
+    for (auto v: vertexSet){
+        v->grau = 0;
+        v->earliestStart = 0;
+        v->path = nullptr;
+
+        for (auto e: v->adj){
+            e.dest->grau++;
+        }
+    }
+
+    for (auto v: vertexSet){
+        if (v->grau == 0){
+            q.insert(v);
+        }
+    }
+
+    durMin = -1;
+
+    while (!q.empty()){
+        Vertex<T> *v = q.remove();
+        if (durMin < v->earliestStart){
+            durMin = v->earliestStart;
+            Vertex<T> *destin = v;
+        }
+
+        for (auto e: v->adj){
+            if (e.dest->earliestStart < v->earliestStart + e.weight){
+                e.dest->earliestStart = v->earliestStart + e.weight;
+                e.dest->path = v;
+            }
+            e.dest->grau--;
+
+            if (e.dest->grau == 0){
+                q.insert(e.dest);
+            }
+        }
+    }
+
+
+
+    std::cout << durMin;
+    return durMin;
+
+}
 
 //fazer bfs para descobrir caminho com menos transbordos
 

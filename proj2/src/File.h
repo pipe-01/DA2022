@@ -8,7 +8,8 @@ class File {
 
 public:
     File();
-    void buildGraph(Graph<int> &graph);
+    void buildGraphCap(Graph<int> &graphCap);
+    void buildGraphDur(Graph<int> &graphDur);
 
 };
 

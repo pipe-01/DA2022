@@ -11,7 +11,7 @@ private:
 public:
     Menu();
     void showMenu();
-    void takeInput(Graph<int> &graph);
+    void takeInput(Graph<int> &graphCap, Graph<int> &graphDur);
 
 };
 

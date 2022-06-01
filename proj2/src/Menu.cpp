@@ -16,12 +16,12 @@ void Menu::showMenu(){
     std::cout << std::endl;
     }
 
-void Menu::takeInput(Graph<int> &graph){
+void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
     int src, dest;
 
     while(true){
-        std::cout << "Selecione a opcao: ";
+        std::cout << "Selecione a opcao (choice1): ";
         std::cin >> choice1;
         switch (choice1) {
             case '1':
@@ -30,21 +30,22 @@ void Menu::takeInput(Graph<int> &graph){
                 std::cout << "Chegada: " << std::endl;
                 std::cin >> dest;
                 std::cout << std::endl;
-                std::cout << "1- Minimo numero de transbordos" << std::endl;
-                std::cout << "2- Maxima dimensao do grupo" << std::endl;
+                std::cout << "1- Minimo numero de transbordos, maximizando dimensão do grupo" << std::endl;
+                std::cout << "2- Maxima dimensao do grupo (qualquer encaminhamento)" << std::endl;
                 std::cout << std::endl;
                 std::cout << "Selecione a opcao: ";
                 std::cin >> choice2;
 
                 if (choice2 == '1'){
-                    graph.bfs(src, dest);
+                    graphCap.bfs(src, dest);
                 }
                 else if (choice2 == '2') {
-                    graph.widestPath(src, dest);
+                    graphCap.widestPath(src, dest);
                 }
                 break;
 
             case '2':
+                graphDur.cpmES();
                 break;
 
             case '3':
