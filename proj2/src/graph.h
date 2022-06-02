@@ -13,7 +13,7 @@ template <class T> class Edge;
 template <class T> class Graph;
 template <class T> class Vertex;
 
-#define INF std::numeric_limits<double>::max()
+#define INF std::numeric_limits<int>::max()
 
 /************************* Vertex  **************************/
 
@@ -80,14 +80,16 @@ template <class T>
 class Edge {
     Vertex<T> * dest;      // destination vertex
     double weight;         // edge weight
+    int flux;
+    double resCap;
 public:
-    Edge(Vertex<T> *d, double w);
+    Edge(Vertex<T> *d, double w, int flux = 0);
     friend class Graph<T>;
     friend class Vertex<T>;
 };
 
 template <class T>
-Edge<T>::Edge(Vertex<T> *d, double w): dest(d), weight(w) {}
+Edge<T>::Edge(Vertex<T> *d, double w, int flux): dest(d), weight(w), resCap(w), flux(flux) {}
 
 
 /*************************** Graph  **************************/
@@ -122,10 +124,41 @@ public:
     // FP03B - All-pair shortest path -  Dynamic Programming - Floyd-Warshall
     void floydWarshallShortestPath(); //TODO...
     std::vector<T> getfloydWarshallPath(const T &origin, const T &dest) const; //TODO...
+
+    /**
+    * este método recebe input do utilizador, o que lhe permite escolher uma opção do menu
+    * @param src conteúdo do vértice de partida
+    * @param destin conteúdo do vértice de chegada
+    * @return void
+    */
     void widestPath(T &src, T &destin);
+    /**
+    * este método permite atualizar o atributo dist de cada vértice
+    * @param *v apontador para um vértice
+    * @param *w apontador para outro vértice
+    * @param weight peso da aresta entre os dois vértices
+    * @return TRUE if the target vertex (w) was relaxed
+    * @return FALSE otherwise
+    */
     bool relaxWidestPath(Vertex<T> *v, Vertex<T> *w, double weight);
+    /**
+    * este método permite calcular o caminho mais curto (em termos de número de nós) desde um nó até outro do grafo
+    * @param src conteúdo do vértice de partida
+    * @param destin conteúdo do vértice de chegada
+    * @return void
+    */
     void bfs(T &src, T &destin);
+    /**
+    * este método permite calcular o peso do caminho crítico do grafo
+    * @return int que representa o peso do caminho crítico
+    */
     int cpmES();
+
+    int edmondKarpFlux(T &src, T &destin);
+    Graph<T> residGraph();
+    void setFlux(const T &sourc, const T &dest, int f);
+    void setResCap(const T &sourc, const T &dest, double cap);
+
 };
 
 
@@ -369,7 +402,7 @@ void Graph<T>::bfs(T &src, T &destin){
 
     while (!q.empty()){
         Vertex<T> *vertex = q.remove();
-        for (auto e: vertex->adj){
+        for (auto &e: vertex->adj){
             if (!e.dest->visited){
                 q.insert(e.dest);
                 e.dest->visited = true;
@@ -414,7 +447,6 @@ int Graph<T>::cpmES(){
         Vertex<T> *v = q.remove();
         if (durMin < v->earliestStart){
             durMin = v->earliestStart;
-            Vertex<T> *destin = v;
         }
 
         for (auto e: v->adj){
@@ -437,7 +469,121 @@ int Graph<T>::cpmES(){
 
 }
 
-//fazer bfs para descobrir caminho com menos transbordos
+template <class T>
+int Graph<T>::edmondKarpFlux(T &src, T &destin) {
+    int maxFlux = 0;
+    Vertex<T> origin(src);
+    std::vector<T> path;
+    int resCap = INF;
+    Graph<T> residualGraph;
+
+    //set fluxes to 0
+    for (auto v: vertexSet){
+        for(auto &edge: v->adj){
+            edge.flux = 0;
+        }
+    }
+
+    //initialize residual graph
+    residualGraph = residGraph();
+    residualGraph.bfs(src, destin);
+    path = residualGraph.getPath(src, destin);
+    Vertex<T> dest = *residualGraph.findVertex(destin);
+
+    while(dest.visited){
+        std::cout << "TESTE\n" << std::endl;
+        for (unsigned int i = 0; i < path.size() - 1; i++){
+            for(auto edge : residualGraph.findVertex(path[i])->adj){
+                if (edge.dest->info == residualGraph.findVertex(path[i+1])->info){
+                    resCap = std::min(resCap, (int)edge.resCap);
+                }
+            }
+        }
+
+        for (unsigned int i = 0; i < path.size() - 1; i++){
+            for(auto &edge : findVertex(path[i])->adj){
+                if (edge.dest->info == findVertex(path[i+1])->info){
+                    edge.flux += resCap;
+                    //std::cout << edge.flux << std::endl;
+                }
+            }
+        }
+
+        residualGraph = residGraph();
+        residualGraph.bfs(src, destin);
+        path = residualGraph.getPath(src, destin);
+        dest = *residualGraph.findVertex(destin);
+
+    }
+
+    origin = *findVertex(src);
+
+    for(auto edge: origin.adj){
+        maxFlux += edge.flux;
+    }
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << maxFlux << std::endl;
+    return maxFlux;
+}
+
+template<class T>
+Graph<T> Graph<T>::residGraph() {
+    Graph<T> residualGraph;
+    //add vertices
+    for (auto v: vertexSet){
+        residualGraph.addVertex(v->info);
+    }
+    //add edges
+    for (auto v: vertexSet){
+        for (auto &edge: v->adj){
+            if (edge.flux == 0){
+                residualGraph.addEdge(v->info, edge.dest->info, edge.weight);
+            }
+            else if(edge.resCap - edge.flux > 0){
+                residualGraph.addEdge(v->info, edge.dest->info, edge.weight);
+                residualGraph.setResCap(v->info, edge.dest->info, edge.resCap);
+                residualGraph.setFlux(v->info, edge.dest->info, edge.flux);
+                residualGraph.setResCap(v->info, edge.dest->info, edge.weight - edge.flux);
+            }
+        }
+    }
+
+    for (auto v: vertexSet){
+        for (auto &edge: v->adj){
+            if(edge.flux > 0){
+                residualGraph.addEdge(edge.dest->info, v->info, edge.weight);
+                residualGraph.setResCap(edge.dest->info, v->info, edge.flux);
+                residualGraph.setFlux(edge.dest->info, v->info, edge.weight - edge.flux);
+            }
+        }
+    }
+
+    return residualGraph;
+}
+
+template <class T>
+void Graph<T>::setFlux(const T &sourc, const T &dest, int f){
+    auto src = findVertex(sourc);
+    for(auto &e : src->adj){
+        if(e.dest->info == dest){
+            e.flux = f;
+        }
+    }
+}
+
+template <class T>
+void Graph<T>::setResCap(const T &sourc, const T &dest, double cap){
+    auto src = findVertex(sourc);
+    for(auto &e : src->adj){
+        if(e.dest->info == dest){
+            e.resCap = cap;
+        }
+    }
+}
+
 
 #endif //PROJETODA3_GRAPH_H
 
