@@ -601,8 +601,44 @@ int Graph<T>::getFlux(const T &sourc, const T &dest){
 }
 
 
+//find if there is a path between 2 vertices
+template <class T>
+bool bfs(Graph<T> graph, Vertex<T> begin, Vertex<T> end){
 
-#endif //PROJETODA3_GRAPH_H
+    Vertex<T> current;
+    int maxPassage=10000;
+    int numVert = graph.getNumVertex();
+    std::vector<bool> toVisit(graph.vertexSet.size(),true);
+    std::queue<Vertex<int>> queue;
+    int index, endIndex=graph.findVertex(end.info);
+
+    queue.push(begin);
+
+    while(queue.size()){
+
+        current = queue.pop();
+        index = graph.findVertex(current.info);
+        toVisit.at(index) = false;
+        for(int i = 0; i < current.adj.size(); i++){
+
+            if(index == endIndex){
+                return true;
+            }
+            if(toVisit.at(index)){
+                Vertex<int> aux = current.adj[i].dest;
+                index = graph.findVertex(aux);
+                toVisit.at(index) = false;
+                queue.push(current.adj[i].dest);
+            }
+        }
+    }
+
+    return false;
+}
+
+
+
+#endif
 
 
 /*
