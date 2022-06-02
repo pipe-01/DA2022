@@ -158,6 +158,7 @@ public:
     Graph<T> residGraph();
     void setFlux(const T &sourc, const T &dest, int f);
     void setResCap(const T &sourc, const T &dest, double cap);
+    int getFlux(const T &sourc, const T &dest);
 
 };
 
@@ -298,6 +299,9 @@ template<class T>
 std::vector<T> Graph<T>::getPath(const T &origin, const T &dest) const{
     std::vector<T> res;
     Vertex<T> *a = findVertex(dest);
+    Vertex<T> *b = findVertex(origin);
+    if (a == nullptr || b == nullptr || a->path == NULL)
+        return res;	
     while (a != nullptr){
         res.push_back(a->info);
         a = a->path;
@@ -366,7 +370,7 @@ void Graph<T>::widestPath(T &src, T &destin) {
 
     std::vector<T> path = getPath(src, destin);
 
-    for (int i = 0; i < path.size(); i++){
+    for (unsigned int i = 0; i < path.size(); i++){
         std::cout << path[i] << std::endl;
     }
 }
@@ -395,7 +399,6 @@ void Graph<T>::bfs(T &src, T &destin){
     auto srcVertex = findVertex(src);
     srcVertex->visited = true;
     srcVertex->dist = 0;
-    int cap = 0;
 
     MutablePriorityQueue<Vertex<T>> q;
     q.insert(srcVertex);
@@ -413,10 +416,15 @@ void Graph<T>::bfs(T &src, T &destin){
 
     std::vector<T> path = getPath(src, destin);
 
-    for (int i = 0; i < path.size(); i++){
-        std::cout << path[i] << std::endl;
+    for (unsigned int i = 0; i < path.size(); i++){
+        if(i == path.size() - 1){
+            std::cout << path[i];
+        }
+        else{
+            std::cout << path[i] << " -> ";
+        }
     }
-
+    std::cout << std::endl;
 }
 
 template <class T>
@@ -464,7 +472,7 @@ int Graph<T>::cpmES(){
 
 
 
-    std::cout << durMin;
+    std::cout << durMin << std::endl;
     return durMin;
 
 }
@@ -472,6 +480,8 @@ int Graph<T>::cpmES(){
 template <class T>
 int Graph<T>::edmondKarpFlux(T &src, T &destin) {
     int maxFlux = 0;
+    int resCap = INF;
+    int pathFlux = 0;
     Vertex<T> origin(src);
     std::vector<T> path;
     Graph<T> residualGraph;
@@ -490,12 +500,11 @@ int Graph<T>::edmondKarpFlux(T &src, T &destin) {
     Vertex<T> dest = *residualGraph.findVertex(destin);
 
     while(dest.visited){
-        int resCapA = 10;
-        std::cout << "TESTE\n" << std::endl;
+        resCap = INF;
         for (unsigned int i = 0; i < path.size() - 1; i++){
             for(auto edge : residualGraph.findVertex(path[i])->adj){
                 if (edge.dest->info == residualGraph.findVertex(path[i+1])->info){
-                    resCapA = std::min(resCapA, (int)edge.resCap);
+                    resCap = std::min(resCap, (int)edge.resCap);
                 }
             }
         }
@@ -503,11 +512,13 @@ int Graph<T>::edmondKarpFlux(T &src, T &destin) {
         for (unsigned int i = 0; i < path.size() - 1; i++){
             for(auto &edge : findVertex(path[i])->adj){
                 if (edge.dest->info == findVertex(path[i+1])->info){
-                    edge.flux += resCapA;
+                    pathFlux = edge.flux;
+                    edge.flux += resCap;
                 }
             }
         }
 
+        std::cout << "Flux: " << pathFlux << std::endl;
         residualGraph = residGraph();
         residualGraph.bfs(src, destin);
         path = residualGraph.getPath(src, destin);
@@ -524,7 +535,7 @@ int Graph<T>::edmondKarpFlux(T &src, T &destin) {
     std::cout << std::endl;
     std::cout << std::endl;
     std::cout << std::endl;
-    std::cout << maxFlux << std::endl;
+    std::cout << "Max Flux: " << maxFlux << std::endl;
     return maxFlux;
 }
 
@@ -582,9 +593,55 @@ void Graph<T>::setResCap(const T &sourc, const T &dest, double cap){
         }
     }
 }
+template <class T>
+int Graph<T>::getFlux(const T &sourc, const T &dest){
+    auto src = findVertex(sourc);
+    for(auto &e : src->adj){
+        if(e.dest->info == dest){
+            return e.flux;
+        }
+    }
+}
 
 
-#endif //PROJETODA3_GRAPH_H
+//find if there is a path between 2 vertices
+template <class T>
+bool bfs(Graph<T> graph, Vertex<T> begin, Vertex<T> end){
+
+    Vertex<T> current;
+    int maxPassage=10000;
+    int numVert = graph.getNumVertex();
+    std::vector<bool> toVisit(graph.vertexSet.size(),true);
+    std::queue<Vertex<int>> queue;
+    int index, endIndex=graph.findVertex(end.info);
+
+    queue.push(begin);
+
+    while(queue.size()){
+
+        current = queue.pop();
+        index = graph.findVertex(current.info);
+        toVisit.at(index) = false;
+        for(int i = 0; i < current.adj.size(); i++){
+
+            if(index == endIndex){
+                return true;
+            }
+            if(toVisit.at(index)){
+                Vertex<int> aux = current.adj[i].dest;
+                index = graph.findVertex(aux);
+                toVisit.at(index) = false;
+                queue.push(current.adj[i].dest);
+            }
+        }
+    }
+
+    return false;
+}
+
+
+
+#endif
 
 
 /*
