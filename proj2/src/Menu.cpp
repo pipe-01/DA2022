@@ -19,7 +19,7 @@ void Menu::showMenu(){
 void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
     int src, dest;
-    int a = 1, b = 6;
+    int a = 1, b = 50;
 
     while(true){
         std::cout << "Selecione a opcao (choice1): ";
@@ -46,8 +46,8 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                 break;
 
             case '2':
-                //graphDur.cpmES();
-                graphCap.edmondKarpFlux(a, b);
+                graphDur.cpmES();
+                //graphCap.edmondKarpFlux(a, b);
                 break;
 
             case '3':
