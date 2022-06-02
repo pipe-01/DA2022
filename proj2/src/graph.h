@@ -474,7 +474,6 @@ int Graph<T>::edmondKarpFlux(T &src, T &destin) {
     int maxFlux = 0;
     Vertex<T> origin(src);
     std::vector<T> path;
-    int resCap = INF;
     Graph<T> residualGraph;
 
     //set fluxes to 0
@@ -491,11 +490,12 @@ int Graph<T>::edmondKarpFlux(T &src, T &destin) {
     Vertex<T> dest = *residualGraph.findVertex(destin);
 
     while(dest.visited){
+        int resCapA = 10;
         std::cout << "TESTE\n" << std::endl;
         for (unsigned int i = 0; i < path.size() - 1; i++){
             for(auto edge : residualGraph.findVertex(path[i])->adj){
                 if (edge.dest->info == residualGraph.findVertex(path[i+1])->info){
-                    resCap = std::min(resCap, (int)edge.resCap);
+                    resCapA = std::min(resCapA, (int)edge.resCap);
                 }
             }
         }
@@ -503,8 +503,7 @@ int Graph<T>::edmondKarpFlux(T &src, T &destin) {
         for (unsigned int i = 0; i < path.size() - 1; i++){
             for(auto &edge : findVertex(path[i])->adj){
                 if (edge.dest->info == findVertex(path[i+1])->info){
-                    edge.flux += resCap;
-                    //std::cout << edge.flux << std::endl;
+                    edge.flux += resCapA;
                 }
             }
         }
@@ -542,7 +541,7 @@ Graph<T> Graph<T>::residGraph() {
             if (edge.flux == 0){
                 residualGraph.addEdge(v->info, edge.dest->info, edge.weight);
             }
-            else if(edge.resCap - edge.flux > 0){
+            else if(edge.weight - edge.flux > 0){
                 residualGraph.addEdge(v->info, edge.dest->info, edge.weight);
                 residualGraph.setResCap(v->info, edge.dest->info, edge.resCap);
                 residualGraph.setFlux(v->info, edge.dest->info, edge.flux);
