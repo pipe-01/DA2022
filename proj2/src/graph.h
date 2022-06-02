@@ -89,7 +89,7 @@ public:
 };
 
 template <class T>
-Edge<T>::Edge(Vertex<T> *d, double w, int flux): dest(d), weight(w), resCap(w), flux(flux) {}
+Edge<T>::Edge(Vertex<T> *d, double w, int flux): dest(d), weight(w), flux(flux), resCap(w) {}
 
 
 /*************************** Graph  **************************/
@@ -154,11 +154,36 @@ public:
     */
     int cpmES();
 
+    /**
+     * este método permite calcular o fluxo maximo dado um nó de origem e um nó de destino
+     * utiliza bfs para encontrar caminhos entre os dois nós
+     * @param src conteúdo do nó de origem	
+     * @param destin conteúdo do nó de destino	
+     * @return int -> fluxo maximo
+     */
     int edmondKarpFlux(T &src, T &destin);
+    /**
+     * cria o grafo residual a partir do grafo original, utilizando o algoritmo de Edmond-Karp
+     * 
+     * @return Graph<T> 
+     */
     Graph<T> residGraph();
+    /**
+     * @brief Set the Flux value of an edge
+     * 
+     * @param sourc conteúdo do nó de origem	
+     * @param dest conteúdo do nó de destino
+     * @param f flux value
+     */
     void setFlux(const T &sourc, const T &dest, int f);
+    /**
+     * @brief Set the Res Cap value of an edge
+     * 
+     * @param sourc conteúdo do nó de origem	
+     * @param dest conteúdo do nó de destino
+     * @param cap resCap value
+     */
     void setResCap(const T &sourc, const T &dest, double cap);
-    int getFlux(const T &sourc, const T &dest);
 
 };
 
@@ -512,8 +537,8 @@ int Graph<T>::edmondKarpFlux(T &src, T &destin) {
         for (unsigned int i = 0; i < path.size() - 1; i++){
             for(auto &edge : findVertex(path[i])->adj){
                 if (edge.dest->info == findVertex(path[i+1])->info){
-                    pathFlux = edge.flux;
                     edge.flux += resCap;
+                    pathFlux = resCap;
                 }
             }
         }
@@ -593,16 +618,6 @@ void Graph<T>::setResCap(const T &sourc, const T &dest, double cap){
         }
     }
 }
-template <class T>
-int Graph<T>::getFlux(const T &sourc, const T &dest){
-    auto src = findVertex(sourc);
-    for(auto &e : src->adj){
-        if(e.dest->info == dest){
-            return e.flux;
-        }
-    }
-}
-
 
 //find if there is a path between 2 vertices
 template <class T>

@@ -19,7 +19,7 @@ void Menu::showMenu(){
 void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
     int src, dest;
-    int a = 1, b = 4;
+    int a = 1, b = 50;
 
     while(true){
         std::cout << "Selecione a opcao (choice1): ";
