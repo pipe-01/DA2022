@@ -81,7 +81,6 @@ class Edge {
     Vertex<T> * dest;      // destination vertex
     double weight;         // edge weight
     int flux;
-    double resCap;
 public:
     Edge(Vertex<T> *d, double w, int flux = 0);
     friend class Graph<T>;
@@ -89,7 +88,7 @@ public:
 };
 
 template <class T>
-Edge<T>::Edge(Vertex<T> *d, double w, int flux): dest(d), weight(w), flux(flux), resCap(w) {}
+Edge<T>::Edge(Vertex<T> *d, double w, int flux): dest(d), weight(w), flux(flux) {}
 
 
 /*************************** Graph  **************************/
@@ -176,14 +175,6 @@ public:
      * @param f flux value
      */
     void setFlux(const T &sourc, const T &dest, int f);
-    /**
-     * @brief Set the Res Cap value of an edge
-     * 
-     * @param sourc conteúdo do nó de origem	
-     * @param dest conteúdo do nó de destino
-     * @param cap resCap value
-     */
-    void setResCap(const T &sourc, const T &dest, double cap);
 
 };
 
@@ -505,7 +496,7 @@ int Graph<T>::cpmES(){
 template <class T>
 int Graph<T>::edmondKarpFlux(T &src, T &destin) {
     int maxFlux = 0;
-    int resCap = INF;
+    int minFlux = INF;
     int pathFlux = 0;
     Vertex<T> origin(src);
     std::vector<T> path;
@@ -525,11 +516,11 @@ int Graph<T>::edmondKarpFlux(T &src, T &destin) {
     Vertex<T> dest = *residualGraph.findVertex(destin);
 
     while(dest.visited){
-        resCap = INF;
+        minFlux = INF;
         for (unsigned int i = 0; i < path.size() - 1; i++){
             for(auto edge : residualGraph.findVertex(path[i])->adj){
                 if (edge.dest->info == residualGraph.findVertex(path[i+1])->info){
-                    resCap = std::min(resCap, (int)edge.resCap);
+                    minFlux = std::min(minFlux, (int)edge.weight);
                 }
             }
         }
@@ -537,8 +528,8 @@ int Graph<T>::edmondKarpFlux(T &src, T &destin) {
         for (unsigned int i = 0; i < path.size() - 1; i++){
             for(auto &edge : findVertex(path[i])->adj){
                 if (edge.dest->info == findVertex(path[i+1])->info){
-                    edge.flux += resCap;
-                    pathFlux = resCap;
+                    edge.flux += minFlux;
+                    pathFlux = minFlux;
                 }
             }
         }
@@ -578,10 +569,8 @@ Graph<T> Graph<T>::residGraph() {
                 residualGraph.addEdge(v->info, edge.dest->info, edge.weight);
             }
             else if(edge.weight - edge.flux > 0){
-                residualGraph.addEdge(v->info, edge.dest->info, edge.weight);
-                residualGraph.setResCap(v->info, edge.dest->info, edge.resCap);
+                residualGraph.addEdge(v->info, edge.dest->info, edge.weight - edge.flux);
                 residualGraph.setFlux(v->info, edge.dest->info, edge.flux);
-                residualGraph.setResCap(v->info, edge.dest->info, edge.weight - edge.flux);
             }
         }
     }
@@ -589,9 +578,8 @@ Graph<T> Graph<T>::residGraph() {
     for (auto v: vertexSet){
         for (auto &edge: v->adj){
             if(edge.flux > 0){
-                residualGraph.addEdge(edge.dest->info, v->info, edge.weight);
-                residualGraph.setResCap(edge.dest->info, v->info, edge.flux);
-                residualGraph.setFlux(edge.dest->info, v->info, edge.weight - edge.flux);
+                residualGraph.addEdge(edge.dest->info, v->info, edge.flux);
+                //residualGraph.setFlux(edge.dest->info, v->info, edge.weight - edge.flux); -> n sei se isto é necessário
             }
         }
     }
@@ -605,16 +593,6 @@ void Graph<T>::setFlux(const T &sourc, const T &dest, int f){
     for(auto &e : src->adj){
         if(e.dest->info == dest){
             e.flux = f;
-        }
-    }
-}
-
-template <class T>
-void Graph<T>::setResCap(const T &sourc, const T &dest, double cap){
-    auto src = findVertex(sourc);
-    for(auto &e : src->adj){
-        if(e.dest->info == dest){
-            e.resCap = cap;
         }
     }
 }
