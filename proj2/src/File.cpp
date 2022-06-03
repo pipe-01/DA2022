@@ -12,7 +12,7 @@ void File::buildGraphCap(Graph<int> &graphCap) {
     std::string filename = "";
     int orig, dest, cap, dur;
 
-    std::cout << "Please select the file you want to test (1 <= x <= 10)" << std::endl;
+    std::cout << "Selecione o ficheiro pretendido (1 <= x <= 12)" << std::endl;
     while(true){
         std::cin >> fileNum;
         if(!std::cin.fail()){
@@ -20,7 +20,7 @@ void File::buildGraphCap(Graph<int> &graphCap) {
         }
         std::cin.clear();
         std::cin.ignore(100000,'\n');
-        std::cout << "The file number must be between 1 and 10" << std::endl;
+        std::cout << "O número do ficheiro deve ser um inteiro entre 1 e 12" << std::endl;
     }
     if(fileNum < 10) {
         filename += "C:\\Users\\ASUS\\PROJETODA3\\in0" + std::to_string(fileNum) + ".txt";
@@ -29,21 +29,21 @@ void File::buildGraphCap(Graph<int> &graphCap) {
         filename += "C:\\Users\\ASUS\\PROJETODA3\\in" + std::to_string(fileNum) + ".txt";
     }
 
-    std::cout << filename << std::endl;
+    //std::cout << filename << std::endl;
 
     data.open(filename, std::ios::in);
     if(!data){
-        std::cout << "Can't open file" << std::endl;
+        std::cout << "Ficheiro não aberto" << std::endl;
     }
     data >> nNodes >> nEdges;
-    std::cout << "Nodes: " << nNodes << " " << "Edges: " << nEdges << std::endl; //debug
+    //std::cout << "Nodes: " << nNodes << " " << "Edges: " << nEdges << std::endl; //debug
 
     for (int i = 1; i <= nNodes; i++){
         graphCap.addVertex(i);
     }
 
     for (int i = 0; i < nEdges; i++){
-        data >> orig >> dest >> cap >> dur;z
+        data >> orig >> dest >> cap >> dur;
         graphCap.addEdge(orig, dest, cap);
         //std::cout << "orig: " << orig << " Duraçao: " << dest << " Capacidade: " << cap << " Duração: " << dur << std::endl; //debug
     }
@@ -56,7 +56,7 @@ void File::buildGraphDur(Graph<int> &graphDur){
     std::string filename = "";
     int orig, dest, cap, dur;
 
-    std::cout << "Please select the file you want to test (1 <= x <= 10)" << std::endl;
+    std::cout << "Selecione o ficheiro pretendido (1 <= x <= 12)" << std::endl;
     while(true){
         std::cin >> fileNum;
         if(!std::cin.fail()){
@@ -64,23 +64,23 @@ void File::buildGraphDur(Graph<int> &graphDur){
         }
         std::cin.clear();
         std::cin.ignore(100000,'\n');
-        std::cout << "The file number must be between 1 and 10" << std::endl;
+        std::cout << "O número do ficheiro deve ser um inteiro entre 1 e 12" << std::endl;
     }
     if(fileNum < 10) {
         filename += "C:\\Users\\ASUS\\PROJETODA3\\in0" + std::to_string(fileNum) + ".txt";
     }
-    else{
+    else if (fileNum >= 10){
         filename += "C:\\Users\\ASUS\\PROJETODA3\\in" + std::to_string(fileNum) + ".txt";
     }
 
-    std::cout << filename << std::endl;
+    //std::cout << filename << std::endl;
 
     data.open(filename, std::ios::in);
     if(!data){
-        std::cout << "Can't open file" << std::endl;
+        std::cout << "Ficheiro não aberto" << std::endl;
     }
     data >> nNodes >> nEdges;
-    std::cout << "Nodes: " << nNodes << " " << "Edges: " << nEdges << std::endl; //debug
+    //std::cout << "Nodes: " << nNodes << " " << "Edges: " << nEdges << std::endl; //debug
 
 
     for (int i = 1; i <= nNodes; i++){

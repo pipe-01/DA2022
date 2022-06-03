@@ -386,9 +386,15 @@ void Graph<T>::widestPath(T &src, T &destin) {
 
     std::vector<T> path = getPath(src, destin);
 
-    for (unsigned int i = 0; i < path.size(); i++){
-        std::cout << path[i] << std::endl;
+    for (unsigned int i = 0; i < path.size(); i++){ //make a method for this to increase modularity
+        if(i == path.size() - 1){
+            std::cout << path[i];
+        }
+        else{
+            std::cout << path[i] << " -> ";
+        }
     }
+    std::cout << std::endl;
 }
 
 template <class T>
@@ -432,7 +438,7 @@ void Graph<T>::bfs(T &src, T &destin){
 
     std::vector<T> path = getPath(src, destin);
 
-    for (unsigned int i = 0; i < path.size(); i++){
+    for (unsigned int i = 0; i < path.size(); i++){ //make a method for this to increase modularity
         if(i == path.size() - 1){
             std::cout << path[i];
         }
@@ -486,9 +492,6 @@ int Graph<T>::cpmES(){
         }
     }
 
-
-
-    std::cout << durMin << std::endl;
     return durMin;
 
 }
@@ -598,7 +601,7 @@ void Graph<T>::setFlux(const T &sourc, const T &dest, int f){
 }
 
 //find if there is a path between 2 vertices
-template <class T>
+/*template <class T>
 bool bfs(Graph<T> graph, Vertex<T> begin, Vertex<T> end){
 
     Vertex<T> current;
@@ -630,7 +633,7 @@ bool bfs(Graph<T> graph, Vertex<T> begin, Vertex<T> end){
     }
 
     return false;
-}
+}*/
 
 
 

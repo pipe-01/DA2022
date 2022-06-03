@@ -19,35 +19,72 @@ void Menu::showMenu(){
 void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
     int src, dest;
-    int a = 1, b = 50;
+    File file;
 
     while(true){
         std::cout << "Selecione a opcao (choice1): ";
         std::cin >> choice1;
         switch (choice1) {
             case '1':
-                std::cout << "Partida: " << std::endl;
-                std::cin >> src;
-                std::cout << "Chegada: " << std::endl;
-                std::cin >> dest;
-                std::cout << std::endl;
-                std::cout << "1- Minimo numero de transbordos, maximizando dimensão do grupo" << std::endl;
-                std::cout << "2- Maxima dimensao do grupo (qualquer encaminhamento)" << std::endl;
+
+                std::cout << "1.1- Cenario 1.1" << std::endl;
+                std::cout << "1.2- Cenario 1.2" << std::endl;
                 std::cout << std::endl;
                 std::cout << "Selecione a opcao: ";
                 std::cin >> choice2;
 
-                if (choice2 == '1'){
-                    graphCap.bfs(src, dest);
-                }
-                else if (choice2 == '2') {
+
+                if (choice2 == "1.1"){
+                    file.buildGraphCap(graphCap);
+
+                    std::cout << "Partida: " << std::endl;
+                    std::cin >> src;
+                    std::cout << "Chegada: " << std::endl;
+                    std::cin >> dest;
+                    std::cout << std::endl;
+
                     graphCap.widestPath(src, dest);
+                }
+                else if (choice2 == "1.2") {
+
+                    file.buildGraphCap(graphCap);
+
+                    std::cout << "Partida: " << std::endl;
+                    std::cin >> src;
+                    std::cout << "Chegada: " << std::endl;
+                    std::cin >> dest;
+                    std::cout << std::endl;
+
+                    graphCap.bfs(src, dest);
                 }
                 break;
 
             case '2':
-                //graphDur.cpmES();
-                graphCap.edmondKarpFlux(a, b);
+                std::cout << "2.3- Cenario 2.3" << std::endl;
+                std::cout << "2.4- Ceario 2.4" << std::endl;
+                std::cout << std::endl;
+                std::cout << "Selecione a opcao: ";
+                std::cin >> choice2;
+
+                if (choice2 == "2.3"){
+
+                    file.buildGraphCap(graphCap);
+
+                    std::cout << "Partida: " << std::endl;
+                    std::cin >> src;
+                    std::cout << "Chegada: " << std::endl;
+                    std::cin >> dest;
+                    std::cout << std::endl;
+
+                    graphCap.edmondKarpFlux(src, dest);
+                }
+                else if (choice2 == "2.4"){
+                    file.buildGraphDur(graphDur);
+
+                    int durMin = graphDur.cpmES();
+                    std::cout << "Reunem-se novamente após " << durMin << " minutos" << std::endl;
+                    std::cout << std::endl;
+                }
                 break;
 
             case '3':

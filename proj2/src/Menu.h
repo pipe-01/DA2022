@@ -2,11 +2,13 @@
 #define PROJETODA3_MENU_H
 
 #include "graph.h"
+#include "File.h"
 
 class Menu {
 
 private:
-    char choice1, choice2;
+    std::string choice2;
+    char choice1;
 
 public:
     Menu();

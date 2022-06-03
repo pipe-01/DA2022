@@ -4,12 +4,8 @@
 
 int main(){
 
-    File file;
     Graph<int> graphCap;
     Graph<int> graphDur;
-    file.buildGraphCap(graphCap);
-    //file.buildGraphDur(graphDur);
-
 
     Menu menu;
     menu.showMenu();
