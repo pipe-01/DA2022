@@ -23,10 +23,10 @@ void File::buildGraphCap(Graph<int> &graphCap) {
         std::cout << "The file number must be between 1 and 10" << std::endl;
     }
     if(fileNum < 10) {
-        filename += "Tests/in0" + std::to_string(fileNum) + ".txt";
+        filename += "C:\\Users\\ASUS\\PROJETODA3\\in0" + std::to_string(fileNum) + ".txt";
     }
     else{
-        filename += "Tests/in" + std::to_string(fileNum) + ".txt";
+        filename += "C:\\Users\\ASUS\\PROJETODA3\\in" + std::to_string(fileNum) + ".txt";
     }
 
     std::cout << filename << std::endl;
@@ -43,7 +43,7 @@ void File::buildGraphCap(Graph<int> &graphCap) {
     }
 
     for (int i = 0; i < nEdges; i++){
-        data >> orig >> dest >> cap >> dur;
+        data >> orig >> dest >> cap >> dur;z
         graphCap.addEdge(orig, dest, cap);
         //std::cout << "orig: " << orig << " Duraçao: " << dest << " Capacidade: " << cap << " Duração: " << dur << std::endl; //debug
     }
@@ -67,10 +67,10 @@ void File::buildGraphDur(Graph<int> &graphDur){
         std::cout << "The file number must be between 1 and 10" << std::endl;
     }
     if(fileNum < 10) {
-        filename += "Tests/in0" + std::to_string(fileNum) + ".txt";
+        filename += "C:\\Users\\ASUS\\PROJETODA3\\in0" + std::to_string(fileNum) + ".txt";
     }
     else{
-        filename += "Tests/in" + std::to_string(fileNum) + ".txt";
+        filename += "C:\\Users\\ASUS\\PROJETODA3\\in" + std::to_string(fileNum) + ".txt";
     }
 
     std::cout << filename << std::endl;
