@@ -37,9 +37,9 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                 if (choice2 == "1.1"){
                     file.buildGraphCap(graphCap);
 
-                    std::cout << "Partida: " << std::endl;
+                    std::cout << "Partida: ";
                     std::cin >> src;
-                    std::cout << "Chegada: " << std::endl;
+                    std::cout << "Chegada: " ;
                     std::cin >> dest;
                     std::cout << std::endl;
 
@@ -49,9 +49,9 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
                     file.buildGraphCap(graphCap);
 
-                    std::cout << "Partida: " << std::endl;
+                    std::cout << "Partida: " ;
                     std::cin >> src;
-                    std::cout << "Chegada: " << std::endl;
+                    std::cout << "Chegada: " ;
                     std::cin >> dest;
                     std::cout << std::endl;
 
@@ -70,9 +70,9 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
                     file.buildGraphCap(graphCap);
 
-                    std::cout << "Partida: " << std::endl;
+                    std::cout << "Partida: " ;
                     std::cin >> src;
-                    std::cout << "Chegada: " << std::endl;
+                    std::cout << "Chegada: ";
                     std::cin >> dest;
                     std::cout << std::endl;
 
