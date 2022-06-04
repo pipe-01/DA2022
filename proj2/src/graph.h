@@ -644,11 +644,6 @@ Graph<T> Graph<T>::residGraph() {
                 residualGraph.addEdge(v->info, edge.dest->info, edge.weight - edge.flux);
                 residualGraph.setFlux(v->info, edge.dest->info, edge.flux);
             }
-        }
-    }
-
-    for (auto v: vertexSet){
-        for (auto &edge: v->adj){
             if(edge.flux > 0){
                 residualGraph.addEdge(edge.dest->info, v->info, edge.flux);
                 //residualGraph.setFlux(edge.dest->info, v->info, edge.weight - edge.flux); -> n sei se isto é necessário

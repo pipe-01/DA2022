@@ -47,6 +47,7 @@ void File::buildGraphCap(Graph<int> &graphCap) {
         graphCap.addEdge(orig, dest, cap);
         //std::cout << "orig: " << orig << " Duraçao: " << dest << " Capacidade: " << cap << " Duração: " << dur << std::endl; //debug
     }
+    data.close();
 }
 
 void File::buildGraphDur(Graph<int> &graphDur){
@@ -92,4 +93,5 @@ void File::buildGraphDur(Graph<int> &graphDur){
         graphDur.addEdge(orig, dest, dur);
         //std::cout << "orig: " << orig << " Duraçao: " << dest << " Capacidade: " << cap << " Duração: " << dur << std::endl; //debug
     }
+    data.close();
 }
