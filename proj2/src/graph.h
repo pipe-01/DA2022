@@ -14,6 +14,7 @@ template <class T> class Graph;
 template <class T> class Vertex;
 
 #define INF std::numeric_limits<int>::max()
+#define MIN_CAP 10000
 
 /************************* Vertex  **************************/
 
@@ -37,6 +38,7 @@ public:
     T getInfo() const;
     double getDist() const;
     Vertex *getPath() const;
+    std::vector<Edge<T> > getAdj() const;
     friend class Graph<T>;
     friend class MutablePriorityQueue<Vertex<T>>;
 };
@@ -74,6 +76,11 @@ Vertex<T> *Vertex<T>::getPath() const {
     return this->path;
 }
 
+template <class T>
+std::vector<Edge<T> > Vertex<T>::getAdj() const {
+    return this->adj;
+}
+
 /********************** Edge  ****************************/
 
 template <class T>
@@ -83,12 +90,24 @@ class Edge {
     int flux;
 public:
     Edge(Vertex<T> *d, double w, int flux = 0);
+    double getWeight();
+    Vertex<T> *getDest();
     friend class Graph<T>;
     friend class Vertex<T>;
 };
 
 template <class T>
 Edge<T>::Edge(Vertex<T> *d, double w, int flux): dest(d), weight(w), flux(flux) {}
+
+template <class T>
+double Edge<T>::getWeight(){
+    return this->weight;
+}
+
+template <class T>
+Vertex<T> *Edge<T>::getDest(){
+    return this->dest;
+}
 
 
 /*************************** Graph  **************************/
@@ -128,9 +147,9 @@ public:
     * este método recebe input do utilizador, o que lhe permite escolher uma opção do menu
     * @param src conteúdo do vértice de partida
     * @param destin conteúdo do vértice de chegada
-    * @return void
+    * @return vetor que contém caminho de maior capacidade
     */
-    void widestPath(T &src, T &destin);
+    std::vector<T> widestPath(T &src, T &destin);
     /**
     * este método permite atualizar o atributo dist de cada vértice
     * @param *v apontador para um vértice
@@ -144,12 +163,12 @@ public:
     * este método permite calcular o caminho mais curto (em termos de número de nós) desde um nó até outro do grafo
     * @param src conteúdo do vértice de partida
     * @param destin conteúdo do vértice de chegada
-    * @return void
+    * @return vetor que contém caminho mais curto
     */
-    void bfs(T &src, T &destin);
+    std::vector<T> bfs(T &src, T &destin);
     /**
     * este método permite calcular o peso do caminho crítico do grafo
-    * @return int que representa o peso do caminho crítico
+    * @return int que representa o tempo mínimo ao fim do qual os grupos que se separaram se voltam a juntar
     */
     int cpmES();
 
@@ -158,23 +177,47 @@ public:
      * utiliza bfs para encontrar caminhos entre os dois nós
      * @param src conteúdo do nó de origem	
      * @param destin conteúdo do nó de destino	
-     * @return int -> fluxo maximo
+     * @return int que representa fluxo maximo
      */
     int edmondKarpFlux(T &src, T &destin);
     /**
      * cria o grafo residual a partir do grafo original, utilizando o algoritmo de Edmond-Karp
      * 
-     * @return Graph<T> 
+     * @return Graph<T> que representa o grafo residual
      */
     Graph<T> residGraph();
     /**
-     * @brief Set the Flux value of an edge
+     * @brief esta função define o fluxo de uma aresta
      * 
      * @param sourc conteúdo do nó de origem	
      * @param dest conteúdo do nó de destino
-     * @param f flux value
+     * @param f valor do fluxo
      */
     void setFlux(const T &sourc, const T &dest, int f);
+
+    /**
+     * @brief esta função permite dar output ao caminho obtido através do método getPath
+     *
+     * @param path vetor que contém o caminho
+     * @return void
+     */
+    void printPath(std::vector<T> path);
+
+    /**
+     * @brief esta função permite obter a capacidade de um caminho de um grafo
+     *
+     * @param path vetor que contém o caminho
+     * @return int que representa a capacidade do caminho
+     */
+    int pathCap(std::vector<T> path);
+
+    /**
+     * @brief esta função permite obter o número de transbordos de um caminho de um grafo
+     *
+     * @param path vetor que contém o caminho
+     * @return int que representa o número de transbordos
+     */
+    int pathTrans(std::vector<T> path);
 
 };
 
@@ -359,7 +402,32 @@ std::vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) cons
 }
 
 template<class T>
-void Graph<T>::widestPath(T &src, T &destin) {
+int Graph<T>::pathCap(std::vector<T> path){
+    int minCap = MIN_CAP;
+    for (unsigned int i = 0; i < path.size(); i++){
+        Vertex<int> *vertex = findVertex(path[i]);
+        for (auto e: vertex->getAdj()){
+            if (e.getDest() == findVertex(path[i + 1])){
+                if (e.getWeight() < minCap){
+                    minCap = e.getWeight();
+                }
+            }
+        }
+    }
+    return minCap;
+}
+
+template<class T>
+int Graph<T>::pathTrans(std::vector<T> path){
+
+    return path.size() - 2;
+
+}
+
+
+template<class T>
+std::vector<T> Graph<T>::widestPath(T &src, T &destin) {
+    int cap;
     for (auto v: vertexSet){
         v->dist = -1;
         v->path = nullptr;
@@ -386,15 +454,7 @@ void Graph<T>::widestPath(T &src, T &destin) {
 
     std::vector<T> path = getPath(src, destin);
 
-    for (unsigned int i = 0; i < path.size(); i++){ //make a method for this to increase modularity
-        if(i == path.size() - 1){
-            std::cout << path[i];
-        }
-        else{
-            std::cout << path[i] << " -> ";
-        }
-    }
-    std::cout << std::endl;
+    return path;
 }
 
 template <class T>
@@ -409,9 +469,23 @@ bool Graph<T>::relaxWidestPath(Vertex<T> *v, Vertex<T> *w, double weight){
     }
 }
 
+template <class T>
+void Graph<T>::printPath(std::vector<T> path){
+
+    for (unsigned int i = 0; i < path.size(); i++){ //make a method for this to increase modularity
+        if(i == path.size() - 1){
+            std::cout << path[i];
+        }
+        else{
+            std::cout << path[i] << " -> ";
+        }
+    }
+    std::cout << std::endl;
+
+}
 
 template <class T>
-void Graph<T>::bfs(T &src, T &destin){
+std::vector<T> Graph<T>::bfs(T &src, T &destin){
     for (auto v: vertexSet){
         v->visited = false;
         v->dist = INF;
@@ -437,16 +511,11 @@ void Graph<T>::bfs(T &src, T &destin){
     }
 
     std::vector<T> path = getPath(src, destin);
+    printPath(path);
 
-    for (unsigned int i = 0; i < path.size(); i++){ //make a method for this to increase modularity
-        if(i == path.size() - 1){
-            std::cout << path[i];
-        }
-        else{
-            std::cout << path[i] << " -> ";
-        }
-    }
-    std::cout << std::endl;
+    return path;
+
+
 }
 
 template <class T>
