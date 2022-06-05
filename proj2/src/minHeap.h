@@ -39,7 +39,7 @@ public:
     bool hasKey(const K& key);  // Heap has key?
     void insert(const K& key, const V& value);      // Insert (key, value) on the heap
     void decreaseKey(const K& key, const V& value); // Decrease value of key
-    pair<K,V> removeMin(); // remove and return key with smaller value
+    K removeMin(); // remove and return key with smaller value
 };
 
 // ----------------------------------------------
@@ -114,14 +114,13 @@ void MinHeap<K,V>::decreaseKey(const K& key, const V& value) {
 
 // remove and return key with smaller value
 template <class K, class V>
-pair<K,V> MinHeap<K,V>::removeMin() {
-    if (size == 0) return make_pair(KEY_NOT_FOUND,KEY_NOT_FOUND);
+K MinHeap<K,V>::removeMin() {
+    if (size == 0) return KEY_NOT_FOUND;
     K min = a[1].key;
-    V value = a[1].value;
     pos.erase(min);
     a[1] = a[size--];
     downHeap(1);
-    return  make_pair(min, value);
+    return min;
 }
 
 #endif //PROJETODA3_MINHEAP_H

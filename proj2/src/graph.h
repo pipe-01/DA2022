@@ -9,6 +9,7 @@
 #include <stack>
 #include <set>
 #include "MutablePriorityQueue.h"
+#include "minHeap.h"
 
 template <class T> class Edge;
 template <class T> class Graph;
@@ -26,6 +27,7 @@ class Vertex {
     bool visited;          // auxiliary field
     double dist = 0;
     double distMax = 0;
+    double cap;
     double distMin = 0;
     Vertex<T> *path = nullptr;
     int queueIndex = 0; 		// required by MutablePriorityQueue
@@ -61,7 +63,7 @@ void Vertex<T>::addEdge(Vertex<T> *d, double w) {
 
 template <class T>
 bool Vertex<T>::operator<(Vertex<T> & vertex) const {
-    return this->dist > vertex.dist;
+    return this->dist < vertex.dist;
 }
 
 template <class T>
@@ -173,7 +175,7 @@ public:
     * este método permite calcular o peso do caminho crítico do grafo
     * @return int que representa o tempo mínimo ao fim do qual os grupos que se separaram se voltam a juntar
     */
-    int cpmES(/*std::set<T> nodes, T &src, T &destin*/);
+    int cpmES();
 
     /**
      * este método permite calcular o fluxo maximo dado um nó de origem e um nó de destino
@@ -182,7 +184,7 @@ public:
      * @param destin conteúdo do nó de destino
      * @return set que contém todos os nodes visitados
      */
-    /*std::set<T>*/ void edmondKarpFlux(T &src, T &destin);
+     void edmondKarpFlux(T &src, T &destin);
     /**
      * cria o grafo residual a partir do grafo original, utilizando o algoritmo de Edmond-Karp
      *
@@ -226,13 +228,31 @@ public:
 
     int getFlux(std::vector<T> path);
 
-    int biggestWaitingTime(T &src);
+    /**
+     * @brief esta função permite obter o tempo máximo de espera e os locais onde há elementos que esperam esse tempo
+     *
+     * @param src conteúdo do vértice de partida
+     * @return void
+     */
+    void biggestWaitingTime(T &src);
 
+    /**
+     * @brief esta função ordena os vértices de modo a que, para cada aresta (a,b), a vem antes de b na ordem
+     *
+     * @param v vértice a ser colocado na ordenação
+     * @param Stack pilha a ser preenchida com os vértices ordenados
+     * @return void
+     */
     void topologicalSortUtil(Vertex<T> *v, std::stack<T>& Stack);
 
+    /**
+     * @brief esta função permite obter o caminho mais longo desde um nó de oriem até todos os outros
+     *
+     * @param src conteúdo do vértice de partida
+     * @return void
+     */
     void longestPath(T &src);
 
-    void shortestPath(T &src);
 
 };
 
@@ -442,26 +462,24 @@ int Graph<T>::pathTrans(std::vector<T> path){
 
 template<class T>
 std::vector<T> Graph<T>::widestPath(T &src, T &destin) {
+
+    MinHeap<Vertex<T>*, int> heap(vertexSet.size(), nullptr);
+
     for (auto v: vertexSet){
-        v->dist = -1;
+        v->cap = 0;
         v->path = nullptr;
+        heap.insert(v, -(v->cap));
     }
     auto srcVertex = findVertex(src);
-    srcVertex->dist = INF;
+    srcVertex->cap = INF;
 
-    MutablePriorityQueue<Vertex<T>> q;
-    q.insert(srcVertex);
-    while (!q.empty()){
-        auto vertex = q.extractMin();
+    heap.decreaseKey(srcVertex, -INF);
+
+    while (heap.getSize() > 0){
+        auto vertex = heap.removeMin();
         for (auto e: vertex->adj){
-            auto oldDist = e.dest->dist;
             if (relaxWidestPath(vertex, e.dest, e.weight)){
-                if (oldDist == -1) {
-                    q.insert(e.dest);
-                }
-                else {
-                    q.decreaseKey(e.dest);
-                }
+                heap.decreaseKey(e.dest, -(e.dest->cap));
             }
         }
     }
@@ -473,8 +491,8 @@ std::vector<T> Graph<T>::widestPath(T &src, T &destin) {
 
 template <class T>
 bool Graph<T>::relaxWidestPath(Vertex<T> *v, Vertex<T> *w, double weight){
-    if (std::min(v->dist, weight) > w->dist){
-        w->dist = std::min(v->dist, weight);
+    if (std::min(v->cap, weight) > w->cap){
+        w->cap = std::min(v->cap, weight);
         w->path = v;
         return true;
     }
@@ -531,7 +549,7 @@ std::vector<T> Graph<T>::bfs(T &src, T &destin){
 }
 
 template <class T>
-int Graph<T>::cpmES(/*std::set<T> nodes, T &src, T &destin*/){
+int Graph<T>::cpmES(){
 
     int durMin;
     MutablePriorityQueue<Vertex<T>> q;
@@ -561,12 +579,12 @@ int Graph<T>::cpmES(/*std::set<T> nodes, T &src, T &destin*/){
         }
 
         for (auto e: v->adj){
-            //if (nodes.find(e.dest->info) != nodes.end()){
-                if (e.dest->earliestStart < v->earliestStart + e.weight){
-                    e.dest->earliestStart = v->earliestStart + e.weight;
-                    e.dest->path = v;
-                }
-            //}
+
+            if (e.dest->earliestStart < v->earliestStart + e.weight){
+                e.dest->earliestStart = v->earliestStart + e.weight;
+                e.dest->path = v;
+            }
+
             e.dest->grau--;
 
             if (e.dest->grau == 0){
@@ -575,7 +593,7 @@ int Graph<T>::cpmES(/*std::set<T> nodes, T &src, T &destin*/){
         }
 
     }
-    //std::vector<T> path = getPath(src, destin);
+
     return durMin;
 
 }
@@ -583,18 +601,14 @@ int Graph<T>::cpmES(/*std::set<T> nodes, T &src, T &destin*/){
 template <class T>
 void Graph<T>::topologicalSortUtil(Vertex<T> *v, std::stack<T> &Stack)
 {
-    // Mark the current node as visited
     v->visited = true;
 
-    // Recur for all the vertices adjacent to this vertex
     for (auto e: v->adj){
         if (!e.dest->visited){
             topologicalSortUtil(e.dest,Stack);
         }
     }
 
-    // Push current vertex to stack which stores topological
-    // sort
     Stack.push(v->info);
 }
 
@@ -606,8 +620,6 @@ void Graph<T>::longestPath(T &src){
         v->visited = false;
     }
 
-    // Call the recursive helper function to store Topological
-    // Sort starting from all vertices one by one
     for (auto v: vertexSet)
         if (!v->visited){
             topologicalSortUtil(v,Stack);
@@ -629,18 +641,14 @@ void Graph<T>::longestPath(T &src){
             for (auto e: current->adj){
                 if (e.dest->distMax < current->distMax + e.weight){
                     e.dest->distMax = current->distMax + e.weight;
-                    //std::cout << "DistMax " << e.dest->distMax << std::endl;
                 }
             }
         }
     }
 
-    /*for (auto v: vertexSet){
-        std::cout << v->distMax << std::endl;
-    }*/
 }
 
-template <class T>
+/*template <class T>
 void Graph<T>::shortestPath(T &src){
     MutablePriorityQueue<Vertex<T>> q;
     for (auto v: vertexSet){
@@ -659,42 +667,52 @@ void Graph<T>::shortestPath(T &src){
             if (relax(vertex, e.dest, e.weight)){
                 if (oldDist == INF)
                     q.insert(e.dest);
-                /*else
-                    q.decreaseKey(e.dest);*/
+                else
+                    q.decreaseKey(e.dest);
             }
         }
     }
 
-    /*for (auto v: vertexSet){
+    *//*for (auto v: vertexSet){
         std::cout << v->dist << std::endl;
-    }*/
+    }*//*
 
-}
+}*/
 
 template <class T>
-int Graph<T>::biggestWaitingTime(T &src){
+void Graph<T>::biggestWaitingTime(T &src){
 
-        int maxWaitingVertex;
+        std::vector<T> maxWaitingVertex;
 
         int maxWaitingTime = NINF;
 
         longestPath(src);
 
-        shortestPath(src);
+        dijkstraShortestPath(src);
 
         for (auto v: vertexSet){
             if ((v->distMax - v->dist) > maxWaitingTime){
                 maxWaitingTime = v->distMax - v->dist;
-                maxWaitingVertex = v->info;
+                maxWaitingVertex.clear();
+                maxWaitingVertex.push_back(v->info);
+            }
+            else if ((v->distMax - v->dist) == maxWaitingTime){
+                maxWaitingVertex.push_back(v->info);
             }
         }
 
-        std::cout << "O tempo maximo de espera " << maxWaitingTime << " ocorre na paragem " << maxWaitingVertex << std::endl;
-        return maxWaitingTime;
+        std::cout << "O tempo maximo de espera de " << maxWaitingTime << " minutos ocorre na(s) paragem(ns) ";
+        for (int i = 0; i < maxWaitingVertex.size(); i++){
+            if (i == maxWaitingVertex.size() - 1){
+                std::cout << maxWaitingVertex[i] << std::endl;
+            }
+            else
+                std::cout << maxWaitingVertex[i] << ", ";
+        }
 }
 
 template <class T>
-/*std::set<T>*/ void Graph<T>::edmondKarpFlux(T &src, T &destin) {
+void Graph<T>::edmondKarpFlux(T &src, T &destin) {
     std::set<T> nodes;
     int maxFlux = 0;
     int minFlux = INF;
@@ -703,14 +721,13 @@ template <class T>
     std::vector<T> path;
     Graph<T> residualGraph;
 
-    //set fluxes to 0
+
     for (auto v: vertexSet){
         for(auto &edge: v->adj){
             edge.flux = 0;
         }
     }
 
-    //initialize residual graph
     residualGraph = residGraph();
     residualGraph.bfs(src, destin);
     path = residualGraph.getPath(src, destin);
@@ -759,17 +776,16 @@ template <class T>
     std::cout << std::endl;
     std::cout << std::endl;
     std::cout << "Max Flux: " << maxFlux << std::endl;
-    //return nodes;
 }
 
 template<class T>
 Graph<T> Graph<T>::residGraph() {
     Graph<T> residualGraph;
-    //add vertices
+
     for (auto v: vertexSet){
         residualGraph.addVertex(v->info);
     }
-    //add edges
+
     for (auto v: vertexSet){
         for (auto &edge: v->adj){
             if (edge.flux == 0){
@@ -897,35 +913,3 @@ bool bfs(Graph<T> graph, Vertex<T> begin, Vertex<T> end){
 
 
 #endif
-
-
-/*
-int cap[nodes.size()];
-bool pai[nodes.size()];
-
-for (int i = 1; i < nodes.size(); i++){
-cap[i] = -1;
-pai[i] = false;
-}
-
-cap[src] = INT_MAX;
-
-MinHeap<int, int> heap(nodes.size(), - 1);
-
-heap.insert(src, -cap[src]);
-
-while (heap.getSize() > 0){
-pair<int, int> pair = heap.removeMin();
-int vertex = pair.first;
-if (cap[vertex] == -1){
-break;
-}
-
-for (auto edge: nodes[vertex].adj){
-if (min(cap[vertex], edge.capacity) > cap[edge.dest]){
-cap[edge.dest] = min(cap[vertex], edge.capacity);
-pai[edge.dest] = vertex;
-heap.decreaseKey(edge.dest, -cap[edge.dest]);
-}
-}
-}*/
