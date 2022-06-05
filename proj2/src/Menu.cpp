@@ -22,7 +22,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
     std::set<int> nodes;
 
     while(true){
-        int src, dest, cap, trans;
+        int src, dest, cap, trans, dimen;
         std::vector<int> path;
         std::cout << "Selecione a opcao (choice1): ";
         std::cin >> choice1;
@@ -94,10 +94,28 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cin >> src;
                     std::cout << "Chegada: " << std::endl;
                     std::cin >> dest;
+                    std::cout << "Dimensão do grupo: " << std::endl;
+                    std::cin >> dimen;
                     std::cout << std::endl;
 
                     paths = graph.dfs(src, dest);
+                    //int i = graph.getMaxFlux(paths.at(0));
 
+                }
+                else if(choice2 == "2.2"){
+                    std::vector<std::vector<int>> paths;
+                    Graph<int> graph;
+                    file.buildGraphCap(graph);
+                    std::cout << "Partida: " << std::endl;
+                    std::cin >> src;
+                    std::cout << "Chegada: " << std::endl;
+                    std::cin >> dest;
+                    std::cout << "Dimensão do grupo: " << std::endl;
+                    std::cin >> dimen;
+                    std::cout << std::endl;
+
+                    paths = graph.dfs(src, dest);
+                    //int i = graph.getMaxFlux(paths.at(0));
                 }
                 else if (choice2 == "2.3"){
 

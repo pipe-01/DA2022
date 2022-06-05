@@ -844,9 +844,14 @@ std::vector<std::vector<T>> Graph<T>::dfs(T &src, T &dest){
 template <class T>
 int Graph<T>::getMaxFlux(std::vector<T> path){
 
-    for(auto info: path){
-        Vertex<T> v = findVertex(info);
-        //int flux = 
+    for(unsigned int i = 0; i < path.size()-1; i++){
+        auto src = findVertex(path.at(i));
+        auto dest = findVertex(path.at(i+1));
+        for(auto &edge: src->adj){
+            if(edge.dest == dest){
+                std::cout << edge.flux << std::endl;
+            }
+        }
     }
 
     return 0;
