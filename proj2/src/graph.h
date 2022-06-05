@@ -713,7 +713,7 @@ template <class T>
     residualGraph = residGraph();
     residualGraph.bfs(src, destin);
     path = residualGraph.getPath(src, destin);
-    for (int i = 0; i < path.size(); i++){
+    for (unsigned int i = 0; i < path.size(); i++){
         nodes.insert(path[i]);
     }
     Vertex<T> dest = *residualGraph.findVertex(destin);
@@ -741,7 +741,7 @@ template <class T>
         residualGraph = residGraph();
         residualGraph.bfs(src, destin);
         path = residualGraph.getPath(src, destin);
-        for (int i = 0; i < path.size(); i++){
+        for (unsigned int i = 0; i < path.size(); i++){
             nodes.insert(path[i]);
         }
         dest = *residualGraph.findVertex(destin);
@@ -846,7 +846,7 @@ int Graph<T>::getMaxFlux(std::vector<T> path){
 
     for(auto info: path){
         Vertex<T> v = findVertex(info);
-        int flux = 
+        //int flux = 
     }
 
     return 0;
