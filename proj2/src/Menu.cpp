@@ -99,22 +99,22 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cout << std::endl;
 
                     paths = graph.dfs(src, dest);
-                    int aux = dimen;
+                    int unallocated = dimen;
                     
                     for(auto path: paths){
-                        if(aux>0){
+                        if(unallocated>0){
                             int flux = graph.getFlux(path); 
                             std::cout << "Path: ";
                             graph.printPath(path);
                             std::cout << "Path's Flux: " << flux << std::endl;
-                            int allocated = aux;
-                            if(aux > flux){
+                            int allocated = unallocated;
+                            if(unallocated > flux){
                                 allocated = flux;
                             }
                             std::cout << "Passengers allocated to this path: " << allocated << std::endl;
-                            aux -= flux;
-                            if(aux < 0) aux = 0;
-                            std::cout << "Passegers to still allocate to a path: " << aux << std::endl << std::endl;
+                            unallocated -= flux;
+                            if(unallocated < 0) unallocated = 0;
+                            std::cout << "Passegers to still allocate to a path: " << unallocated << std::endl << std::endl;
                         }
                     }
 
@@ -132,7 +132,33 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cout << std::endl;
 
                     paths = graph.dfs(src, dest);
-                    //int i = graph.getMaxFlux(paths.at(0));
+
+                    std::vector<std::vector<int>> aux(paths);
+                    int unallocated = dimen;
+
+                    while(unallocated > 0 && !aux.empty()){
+                        int maxIndex = 0;
+                        int fluxMax = 0;
+                        for(unsigned int i = 0; i < paths.size(); i++){
+                            int flux = graph.getFlux(paths.at(i));
+                            if(flux > fluxMax){
+                                fluxMax = flux;
+                                maxIndex = i;
+                            }
+                        }
+                        std::cout << "Path: ";
+                        graph.printPath(paths.at(maxIndex));
+                        std::cout << "Path's Flux: " << fluxMax << std::endl;
+                        int allocated = unallocated;
+                        if(allocated > fluxMax){
+                            allocated = fluxMax;
+                        }
+                        std::cout << "Passengers allocated to this path: " << allocated << std::endl;
+                        unallocated -= fluxMax;
+                        if(unallocated < 0) unallocated = 0;
+                        std::cout << "Passegers to still allocate to a path: " << unallocated << std::endl << std::endl;
+                        paths.erase(paths.begin()+maxIndex);
+                    }
                 }
                 else if (choice2 == "2.3"){
 
