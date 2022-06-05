@@ -16,7 +16,7 @@ template <class T> class Vertex;
 
 #define INF std::numeric_limits<int>::max()
 #define MIN_CAP 10000
-#define NINF INT_MIN
+#define NINF std::numeric_limits<int>::min()
 /************************* Vertex  **************************/
 
 template <class T>
@@ -667,8 +667,8 @@ int Graph<T>::biggestWaitingTime(T &src){
         shortestPath(src);
 
         for (auto v: vertexSet){
-            if ((v.distMax - v.distMin) > maxWaitingTime){
-                maxWaitingTime = v.distMax - v.distMin;
+            if ((v->distMax - v->distMin) > maxWaitingTime){
+                maxWaitingTime = v->distMax - v->distMin;
             }
         }
 
