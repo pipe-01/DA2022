@@ -97,7 +97,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cout << "Dimensão do grupo: " << std::endl;
                     std::cin >> dimen;
                     std::cout << std::endl;
-
+                
                     paths = graph.dfs(src, dest);
                     int unallocated = dimen;
                     
@@ -164,7 +164,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                         //Case all paths were filled and there are still unallocated people
                         if(aux.empty()){
                             if(unallocated>0){
-                                std::cout << "All paths were filled, but there are still " << unallocated << "unallocated  people" << std::endl;
+                                std::cout << "All paths were filled, but there are still " << unallocated << " unallocated  people" << std::endl;
                             }
                             else{
                                 std::cout << "Everyone allocated to a path!" << std::endl;

@@ -28,7 +28,7 @@ void File::buildGraphCap(Graph<int> &graphCap) {
     else{
         filename += PATH_UBUNTU2  + std::to_string(fileNum) + ".txt";
     }
-    //filename = "Tests/mytest.txt";
+    filename = "Tests/mytest.txt";
     //std::cout << filename << std::endl;
     data.open(filename, std::ios::in);
     if(!data){
