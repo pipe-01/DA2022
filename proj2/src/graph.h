@@ -224,7 +224,8 @@ public:
 
     std::vector<std::vector<T>> dfs(T &src, T &dest);
 
-    int getMaxFlux(std::vector<T> path);
+    int getFlux(std::vector<T> path);
+
     int biggestWaitingTime(T &src);
 
     void topologicalSortUtil(Vertex<T> *v, std::stack<T>& Stack);
@@ -832,29 +833,30 @@ std::vector<std::vector<T>> Graph<T>::dfs(T &src, T &dest){
             }
         }
     }
-
+/* 
     for(auto path: paths){
 
         printPath(path);
     }
-    
+*/
     return paths;
 }
 
 template <class T>
-int Graph<T>::getMaxFlux(std::vector<T> path){
+int Graph<T>::getFlux(std::vector<T> path){
 
+    int flux = 1000;
     for(unsigned int i = 0; i < path.size()-1; i++){
         auto src = findVertex(path.at(i));
         auto dest = findVertex(path.at(i+1));
         for(auto &edge: src->adj){
-            if(edge.dest == dest){
-                std::cout << edge.flux << std::endl;
+            if(edge.dest == dest && edge.getWeight() < flux){
+                flux = edge.getWeight();
             }
         }
     }
 
-    return 0;
+    return flux;
 }
 
 //find if there is a path between 2 vertices

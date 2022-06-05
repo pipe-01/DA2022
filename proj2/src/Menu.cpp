@@ -99,7 +99,24 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cout << std::endl;
 
                     paths = graph.dfs(src, dest);
-                    //int i = graph.getMaxFlux(paths.at(0));
+                    int aux = dimen;
+                    
+                    for(auto path: paths){
+                        if(aux>0){
+                            int flux = graph.getFlux(path); 
+                            std::cout << "Path: ";
+                            graph.printPath(path);
+                            std::cout << "Path's Flux: " << flux << std::endl;
+                            int allocated = aux;
+                            if(aux > flux){
+                                allocated = flux;
+                            }
+                            std::cout << "Passengers allocated to this path: " << allocated << std::endl;
+                            aux -= flux;
+                            if(aux < 0) aux = 0;
+                            std::cout << "Passegers to still allocate to a path: " << aux << std::endl << std::endl;
+                        }
+                    }
 
                 }
                 else if(choice2 == "2.2"){
