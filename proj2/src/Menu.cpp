@@ -48,7 +48,6 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cout << std::endl;
 
                     path = graphCap.widestPath(src, dest);
-                    graphCap.printPath(path);
                     cap = graphCap.pathCap(path);
 
                     std::cout << "Maximum number of people in this path: " << cap << std::endl;
@@ -75,13 +74,29 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                 break;
 
             case '2':
-                std::cout << "2.3- Cenario 2.3" << std::endl;
-                std::cout << "2.4- Ceario 2.4" << std::endl;
+                std::cout << "2.1 - Cenário 2.1" << std::endl;
+                std::cout << "2.2 - Cenário 2.1" << std::endl;
+                std::cout << "2.3 - Cenário 2.3" << std::endl;
+                std::cout << "2.4 - Cenário 2.4" << std::endl;
                 std::cout << std::endl;
                 std::cout << "Selecione a opcao: ";
                 std::cin >> choice2;
 
-                if (choice2 == "2.3"){
+                if(choice2 == "2.1"){
+
+                    std::vector<std::vector<int>> paths;
+                    Graph<int> graph;
+                    file.buildGraphCap(graph);
+                    std::cout << "Partida: " << std::endl;
+                    std::cin >> src;
+                    std::cout << "Chegada: " << std::endl;
+                    std::cin >> dest;
+                    std::cout << std::endl;
+
+                    paths = graph.dfs(src, dest);
+
+                }
+                else if (choice2 == "2.3"){
 
                     Graph<int> graphCap;
 

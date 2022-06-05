@@ -23,14 +23,13 @@ void File::buildGraphCap(Graph<int> &graphCap) {
         std::cout << "O número do ficheiro deve ser um inteiro entre 1 e 12" << std::endl;
     }
     if(fileNum < 10) {
-        filename += "C:\\Users\\ASUS\\PROJETODA3\\in0" + std::to_string(fileNum) + ".txt";
+        filename +=  PATH_UBUNTU1 + std::to_string(fileNum) + ".txt";
     }
     else{
-        filename += "C:\\Users\\ASUS\\PROJETODA3\\in" + std::to_string(fileNum) + ".txt";
+        filename += PATH_UBUNTU2  + std::to_string(fileNum) + ".txt";
     }
-
+    //filename = "Tests/mytest.txt";
     //std::cout << filename << std::endl;
-
     data.open(filename, std::ios::in);
     if(!data){
         std::cout << "Ficheiro não aberto" << std::endl;
@@ -68,14 +67,15 @@ void File::buildGraphDur(Graph<int> &graphDur){
         std::cout << "O número do ficheiro deve ser um inteiro entre 1 e 12" << std::endl;
     }
     if(fileNum < 10) {
-        filename += "C:\\Users\\ASUS\\PROJETODA3\\in0" + std::to_string(fileNum) + ".txt";
+        filename += PATH_UBUNTU1 + std::to_string(fileNum) + ".txt";
     }
     else if (fileNum >= 10){
-        filename += "C:\\Users\\ASUS\\PROJETODA3\\in" + std::to_string(fileNum) + ".txt";
+        filename += PATH_UBUNTU2 + std::to_string(fileNum) + ".txt";
     }
 
     //std::cout << filename << std::endl;
 
+    //filename = "Tests/mytest.txt";
     data.open(filename, std::ios::in);
     if(!data){
         std::cout << "Ficheiro não aberto" << std::endl;

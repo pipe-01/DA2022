@@ -219,6 +219,9 @@ public:
      */
     int pathTrans(std::vector<T> path);
 
+    std::vector<std::vector<T>> dfs(T &src, T &dest);
+
+    int getMaxFlux(std::vector<T> path);
 };
 
 
@@ -427,7 +430,6 @@ int Graph<T>::pathTrans(std::vector<T> path){
 
 template<class T>
 std::vector<T> Graph<T>::widestPath(T &src, T &destin) {
-    int cap;
     for (auto v: vertexSet){
         v->dist = -1;
         v->path = nullptr;
@@ -509,13 +511,11 @@ std::vector<T> Graph<T>::bfs(T &src, T &destin){
             }
         }
     }
-
+ 
     std::vector<T> path = getPath(src, destin);
     printPath(path);
 
     return path;
-
-
 }
 
 template <class T>
@@ -662,6 +662,60 @@ void Graph<T>::setFlux(const T &sourc, const T &dest, int f){
             e.flux = f;
         }
     }
+}
+
+template <class T>
+std::vector<std::vector<T>> Graph<T>::dfs(T &src, T &dest){
+
+    std::vector<std::vector<T>> paths;
+    for (auto v: vertexSet){
+        v->visited = false;
+        v->dist = INF;
+        v->path = nullptr;
+    }
+
+    auto srcVertex = findVertex(src);
+    srcVertex->visited = true;
+    srcVertex->dist = 0;
+
+    std::stack<Vertex<T>*> st;
+    st.push(srcVertex);
+
+    while (!st.empty()){
+
+        Vertex<T> *current = st.top();
+        st.pop();
+        if(current->info == dest){
+            current->visited = false;
+            std::vector<T> path = getPath(src, dest);
+            paths.push_back(path);
+        }
+        for (auto &e: current->adj){
+            if (!e.dest->visited){
+                st.push(e.dest);
+                e.dest->visited = true;
+                e.dest->path = current;
+            }
+        }
+    }
+
+    for(auto path: paths){
+
+        printPath(path);
+    }
+    
+    return paths;
+}
+
+template <class T>
+int Graph<T>::getMaxFlux(std::vector<T> path){
+
+    for(auto info: path){
+        Vertex<T> v = findVertex(info);
+        int flux = 
+    }
+
+    return 0;
 }
 
 //find if there is a path between 2 vertices
