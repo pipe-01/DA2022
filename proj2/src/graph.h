@@ -228,6 +228,8 @@ public:
 
     void longestPath(T &src);
 
+    void shortestPath(T &src);
+
 };
 
 
@@ -634,13 +636,44 @@ void Graph<T>::longestPath(T &src){
 }
 
 template <class T>
+void Graph<T>::shortestPath(T &src){
+    MutablePriorityQueue<Vertex<T>> q;
+    for (auto v: vertexSet){
+        v->distMin = INF;
+        v->visited = false;
+    }
+    Vertex<T> *s = findVertex(src);
+    s->distMin = 0;
+    q.insert(s);
+
+    while (!q.empty()){
+        auto vertex = q.extractMin();
+        vertex->visited = true;
+        for (auto e: vertex->adj){
+            if (!e.dest->visited && vertex->distMin + e.weight < e.dest->distMin){
+                e.dest->distMin = e.weight + vertex->distMin;
+            }
+        }
+    }
+}
+
+template <class T>
 int Graph<T>::biggestWaitingTime(T &src){
+
+        int maxWaitingTime = NINF;
 
         longestPath(src);
 
-        std::cout << "abc" << std::endl;
+        shortestPath(src);
 
-        return 0;
+        for (auto v: vertexSet){
+            if ((v.distMax - v.distMin) > maxWaitingTime){
+                maxWaitingTime = v.distMax - v.distMin;
+            }
+        }
+
+        std::cout << maxWaitingTime << std::endl;
+        return maxWaitingTime;
 }
 
 template <class T>
