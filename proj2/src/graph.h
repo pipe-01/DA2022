@@ -628,37 +628,52 @@ void Graph<T>::longestPath(T &src){
             for (auto e: current->adj){
                 if (e.dest->distMax < current->distMax + e.weight){
                     e.dest->distMax = current->distMax + e.weight;
-                    //std::cout << e.dest->distMax << std::endl;
+                    //std::cout << "DistMax " << e.dest->distMax << std::endl;
                 }
             }
         }
     }
+
+    /*for (auto v: vertexSet){
+        std::cout << v->distMax << std::endl;
+    }*/
 }
 
 template <class T>
 void Graph<T>::shortestPath(T &src){
     MutablePriorityQueue<Vertex<T>> q;
     for (auto v: vertexSet){
-        v->distMin = INF;
+        v->dist = INF;
         v->visited = false;
     }
     Vertex<T> *s = findVertex(src);
-    s->distMin = 0;
+    s->dist = 0;
     q.insert(s);
 
     while (!q.empty()){
         auto vertex = q.extractMin();
         vertex->visited = true;
         for (auto e: vertex->adj){
-            if (!e.dest->visited && vertex->distMin + e.weight < e.dest->distMin){
-                e.dest->distMin = e.weight + vertex->distMin;
+            auto oldDist = e.dest->dist;
+            if (relax(vertex, e.dest, e.weight)){
+                if (oldDist == INF)
+                    q.insert(e.dest);
+                /*else
+                    q.decreaseKey(e.dest);*/
             }
         }
     }
+
+    /*for (auto v: vertexSet){
+        std::cout << v->dist << std::endl;
+    }*/
+
 }
 
 template <class T>
 int Graph<T>::biggestWaitingTime(T &src){
+
+        int maxWaitingVertex;
 
         int maxWaitingTime = NINF;
 
@@ -667,12 +682,13 @@ int Graph<T>::biggestWaitingTime(T &src){
         shortestPath(src);
 
         for (auto v: vertexSet){
-            if ((v->distMax - v->distMin) > maxWaitingTime){
-                maxWaitingTime = v->distMax - v->distMin;
+            if ((v->distMax - v->dist) > maxWaitingTime){
+                maxWaitingTime = v->distMax - v->dist;
+                maxWaitingVertex = v->info;
             }
         }
 
-        std::cout << maxWaitingTime << std::endl;
+        std::cout << "O tempo maximo de espera " << maxWaitingTime << " ocorre na paragem " << maxWaitingVertex << std::endl;
         return maxWaitingTime;
 }
 

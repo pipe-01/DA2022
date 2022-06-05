@@ -23,10 +23,10 @@ void File::buildGraphCap(Graph<int> &graphCap) {
         std::cout << "O número do ficheiro deve ser um inteiro entre 1 e 12" << std::endl;
     }
     if(fileNum < 10) {
-        filename += "C:\\Users\\ASUS\\PROJETODA3\\in0" + std::to_string(fileNum) + ".txt";
+        filename += "C:\\Users\\ASUS\\PROJETODA4\\DA2022\\proj2\\src\\Tests\\in0" + std::to_string(fileNum) + ".txt";
     }
     else{
-        filename += "C:\\Users\\ASUS\\PROJETODA3\\in" + std::to_string(fileNum) + ".txt";
+        filename += "C:\\Users\\ASUS\\PROJETODA4\\DA2022\\proj2\\src\\Tests\\in" + std::to_string(fileNum) + ".txt";
     }
 
     //std::cout << filename << std::endl;
@@ -68,10 +68,10 @@ void File::buildGraphDur(Graph<int> &graphDur){
         std::cout << "O número do ficheiro deve ser um inteiro entre 1 e 12" << std::endl;
     }
     if(fileNum < 10) {
-        filename += "C:\\Users\\ASUS\\PROJETODA3\\in0" + std::to_string(fileNum) + ".txt";
+        filename += "C:\\Users\\ASUS\\PROJETODA4\\DA2022\\proj2\\src\\Tests\\in0" + std::to_string(fileNum) + ".txt";
     }
     else if (fileNum >= 10){
-        filename += "C:\\Users\\ASUS\\PROJETODA3\\in" + std::to_string(fileNum) + ".txt";
+        filename += "C:\\Users\\ASUS\\PROJETODA4\\DA2022\\proj2\\src\\Tests\\in" + std::to_string(fileNum) + ".txt";
     }
 
     //std::cout << filename << std::endl;
