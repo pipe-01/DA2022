@@ -114,6 +114,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                             std::cout << "Passengers allocated to this path: " << allocated << std::endl;
                             unallocated -= flux;
                             if(unallocated < 0) unallocated = 0;
+                            std::cout << "Free spots for this path: " << flux - allocated << std::endl;
                             std::cout << "Passegers to still allocate to a path: " << unallocated << std::endl << std::endl;
                         }
                     }
@@ -136,18 +137,18 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::vector<std::vector<int>> aux(paths);
                     int unallocated = dimen;
 
-                    while(unallocated > 0 && !aux.empty()){
+                    while(unallocated > 0){
                         int maxIndex = 0;
                         int fluxMax = 0;
-                        for(unsigned int i = 0; i < paths.size(); i++){
-                            int flux = graph.getFlux(paths.at(i));
+                        for(unsigned int i = 0; i < aux.size(); i++){
+                            int flux = graph.getFlux(aux.at(i));
                             if(flux > fluxMax){
                                 fluxMax = flux;
                                 maxIndex = i;
                             }
                         }
                         std::cout << "Path: ";
-                        graph.printPath(paths.at(maxIndex));
+                        graph.printPath(aux.at(maxIndex));
                         std::cout << "Path's Flux: " << fluxMax << std::endl;
                         int allocated = unallocated;
                         if(allocated > fluxMax){
@@ -156,8 +157,20 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                         std::cout << "Passengers allocated to this path: " << allocated << std::endl;
                         unallocated -= fluxMax;
                         if(unallocated < 0) unallocated = 0;
+                        std::cout << "Free spots for this path: " << fluxMax - allocated << std::endl;
                         std::cout << "Passegers to still allocate to a path: " << unallocated << std::endl << std::endl;
-                        paths.erase(paths.begin()+maxIndex);
+                        aux.erase(aux.begin()+maxIndex);
+
+                        //Case all paths were filled and there are still unallocated people
+                        if(aux.empty()){
+                            if(unallocated>0){
+                                std::cout << "All paths were filled, but there are still " << unallocated << "unallocated  people" << std::endl;
+                            }
+                            else{
+                                std::cout << "Everyone allocated to a path!" << std::endl;
+                            }
+                            break;
+                        }
                     }
                 }
                 else if (choice2 == "2.3"){
