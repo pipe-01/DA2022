@@ -49,6 +49,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cout << std::endl;
 
                     path = graphCap.widestPath(src, dest);
+                    graphCap.printPath(path);
                     cap = graphCap.pathCap(path);
 
                     std::cout << "Maximum number of people in this path: " << cap << std::endl;
@@ -75,12 +76,11 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                 break;
 
             case '2':
-                std::cout << "2.1 - Cenário 2.1" << std::endl;
-                std::cout << "2.2 - Cenário 2.1" << std::endl;
-                std::cout << "2.3 - Cenário 2.3" << std::endl;
-                std::cout << "2.4 - Cenário 2.4" << std::endl;
-                std::cout << "2.3- Cenario 2.3" << std::endl;
-                std::cout << "2.4- Cenario 2.4" << std::endl;
+                std::cout << "2.1 - Cenario 2.1" << std::endl;
+                std::cout << "2.2 - Cenario 2.2" << std::endl;
+                std::cout << "2.3 - Cenario 2.3" << std::endl;
+                std::cout << "2.4 - Cenario 2.4" << std::endl;
+                std::cout << "2.5-  Cenario 2.5" << std::endl;
                 std::cout << std::endl;
                 std::cout << "Selecione a opcao: ";
                 std::cin >> choice2;
@@ -88,24 +88,24 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                 if(choice2 == "2.1"){
 
                     std::vector<std::vector<int>> paths;
-                    Graph<int> graph;
-                    file.buildGraphCap(graph);
+                    Graph<int> graphCap;
+                    file.buildGraphCap(graphCap);
                     std::cout << "Partida: " << std::endl;
                     std::cin >> src;
                     std::cout << "Chegada: " << std::endl;
                     std::cin >> dest;
-                    std::cout << "Dimensão do grupo: " << std::endl;
+                    std::cout << "Dimensao do grupo: " << std::endl;
                     std::cin >> dimen;
                     std::cout << std::endl;
 
-                    paths = graph.dfs(src, dest);
+                    paths = graphCap.dfs(src, dest);
                     int unallocated = dimen;
                     
                     for(auto path: paths){
                         if(unallocated>0){
-                            int flux = graph.getFlux(path); 
+                            int flux = graphCap.getFlux(path);
                             std::cout << "Path: ";
-                            graph.printPath(path);
+                            graphCap.printPath(path);
                             std::cout << "Path's Flux: " << flux << std::endl;
                             int allocated = unallocated;
                             if(unallocated > flux){
@@ -122,17 +122,17 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                 }
                 else if(choice2 == "2.2"){
                     std::vector<std::vector<int>> paths;
-                    Graph<int> graph;
-                    file.buildGraphCap(graph);
+                    Graph<int> graphCap;
+                    file.buildGraphCap(graphCap);
                     std::cout << "Partida: " << std::endl;
                     std::cin >> src;
                     std::cout << "Chegada: " << std::endl;
                     std::cin >> dest;
-                    std::cout << "Dimensão do grupo: " << std::endl;
+                    std::cout << "Dimensao do grupo: " << std::endl;
                     std::cin >> dimen;
                     std::cout << std::endl;
 
-                    paths = graph.dfs(src, dest);
+                    paths = graphCap.dfs(src, dest);
 
                     std::vector<std::vector<int>> aux(paths);
                     int unallocated = dimen;
@@ -141,14 +141,14 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                         int maxIndex = 0;
                         int fluxMax = 0;
                         for(unsigned int i = 0; i < aux.size(); i++){
-                            int flux = graph.getFlux(aux.at(i));
+                            int flux = graphCap.getFlux(aux.at(i));
                             if(flux > fluxMax){
                                 fluxMax = flux;
                                 maxIndex = i;
                             }
                         }
                         std::cout << "Path: ";
-                        graph.printPath(aux.at(maxIndex));
+                        graphCap.printPath(aux.at(maxIndex));
                         std::cout << "Path's Flux: " << fluxMax << std::endl;
                         int allocated = unallocated;
                         if(allocated > fluxMax){
@@ -185,7 +185,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cin >> dest;
                     std::cout << std::endl;
 
-                    /*nodes =*/ graphCap.edmondKarpFlux(src, dest);
+                    graphCap.edmondKarpFlux(src, dest);
                 }
                 else if (choice2 == "2.4"){
 
@@ -193,13 +193,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
                     file.buildGraphDur(graphDur);
 
-                    /*std::cout << "Partida: " << std::endl;
-                    std::cin >> src;
-                    std::cout << "Chegada: " << std::endl;
-                    std::cin >> dest;
-                    std::cout << std::endl;*/
-
-                    int durMin = graphDur.cpmES(/*nodes, src, dest*/);
+                    int durMin = graphDur.cpmES();
                     std::cout << "Reunem-se novamente apos " << durMin << " minutos" << std::endl;
                     std::cout << std::endl;
                 }

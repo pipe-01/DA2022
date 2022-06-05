@@ -4,8 +4,8 @@
 
 #include "graph.h"
 
-#define PATH_WIN1 "C:\\Users\\ASUS\\PROJETODA3\\in0"
-#define PATH_WIN2 "C:\\Users\\ASUS\\PROJETODA3\\in"
+#define PATH_WIN1 "C:\\Users\\ASUS\\PROJETODA4\\DA2022\\proj2\\src\\Tests\\in0"
+#define PATH_WIN2 "C:\\Users\\ASUS\\PROJETODA4\\DA2022\\proj2\\src\\Tests\\in"
 #define PATH_UBUNTU1 "Tests/in0"
 #define PATH_UBUNTU2 "Tests/in"
 
