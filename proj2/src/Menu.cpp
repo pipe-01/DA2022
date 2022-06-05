@@ -19,6 +19,7 @@ void Menu::showMenu(){
 void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
     File file;
+    std::set<int> nodes;
 
     while(true){
         int src, dest, cap, trans;
@@ -78,6 +79,8 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                 std::cout << "2.2 - Cenário 2.1" << std::endl;
                 std::cout << "2.3 - Cenário 2.3" << std::endl;
                 std::cout << "2.4 - Cenário 2.4" << std::endl;
+                std::cout << "2.3- Cenario 2.3" << std::endl;
+                std::cout << "2.4- Cenario 2.4" << std::endl;
                 std::cout << std::endl;
                 std::cout << "Selecione a opcao: ";
                 std::cin >> choice2;
@@ -108,7 +111,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cin >> dest;
                     std::cout << std::endl;
 
-                    graphCap.edmondKarpFlux(src, dest);
+                    /*nodes =*/ graphCap.edmondKarpFlux(src, dest);
                 }
                 else if (choice2 == "2.4"){
 
@@ -116,9 +119,27 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
                     file.buildGraphDur(graphDur);
 
-                    int durMin = graphDur.cpmES();
+                    /*std::cout << "Partida: " << std::endl;
+                    std::cin >> src;
+                    std::cout << "Chegada: " << std::endl;
+                    std::cin >> dest;
+                    std::cout << std::endl;*/
+
+                    int durMin = graphDur.cpmES(/*nodes, src, dest*/);
                     std::cout << "Reunem-se novamente apos " << durMin << " minutos" << std::endl;
                     std::cout << std::endl;
+                }
+
+                else if (choice2 == "2.5"){
+                    Graph<int> graphDur;
+
+                    file.buildGraphDur(graphDur);
+
+                    std::cout << "Partida: " << std::endl;
+                    std::cin >> src;
+                    std::cout << std::endl;
+
+                    graphDur.biggestWaitingTime(src);
                 }
                 break;
 
