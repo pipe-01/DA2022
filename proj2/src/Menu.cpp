@@ -90,6 +90,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::vector<std::vector<int>> paths;
                     Graph<int> graphCap;
                     file.buildGraphCap(graphCap);
+                    
                     std::cout << "Partida: " << std::endl;
                     std::cin >> src;
                     std::cout << "Chegada: " << std::endl;

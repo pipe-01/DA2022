@@ -120,7 +120,7 @@ Vertex<T> *Edge<T>::getDest(){
 template <class T>
 class Graph {
     std::vector<Vertex<T> *> vertexSet;    // vertex set
-
+    
     //Fp05
     Vertex<T> * initSingleSource(const T &orig);
     bool relax(Vertex<T> *v, Vertex<T> *w, double weight);
@@ -184,7 +184,7 @@ public:
      * @param destin conteúdo do nó de destino
      * @return set que contém todos os nodes visitados
      */
-     void edmondKarpFlux(T &src, T &destin);
+    void edmondKarpFlux(T &src, T &destin);
     /**
      * cria o grafo residual a partir do grafo original, utilizando o algoritmo de Edmond-Karp
      *
@@ -227,6 +227,8 @@ public:
     std::vector<std::vector<T>> dfs(T &src, T &dest);
 
     int getFlux(std::vector<T> path);
+
+    void fordFulkerson(T &src, T &destin);
 
     /**
      * @brief esta função permite obter o tempo máximo de espera e os locais onde há elementos que esperam esse tempo
@@ -826,7 +828,6 @@ std::vector<std::vector<T>> Graph<T>::dfs(T &src, T &dest){
     }
 
     auto srcVertex = findVertex(src);
-    srcVertex->visited = true;
     srcVertex->dist = 0;
 
     std::stack<Vertex<T>*> st;
@@ -836,6 +837,8 @@ std::vector<std::vector<T>> Graph<T>::dfs(T &src, T &dest){
 
         Vertex<T> *current = st.top();
         st.pop();
+        std::cout << "current: " << current->info << std::endl;
+        current->visited = true;
         if(current->info == dest){
             current->visited = false;
             std::vector<T> path = getPath(src, dest);
@@ -843,8 +846,9 @@ std::vector<std::vector<T>> Graph<T>::dfs(T &src, T &dest){
         }
         for (auto &e: current->adj){
             if (!e.dest->visited){
+                std::cout << e.dest->info << std::endl;
                 st.push(e.dest);
-                e.dest->visited = true;
+                //e.dest->visited = true;
                 e.dest->path = current;
             }
         }
@@ -873,6 +877,43 @@ int Graph<T>::getFlux(std::vector<T> path){
     }
 
     return flux;
+}
+
+template <class T>
+void Graph<T>::fordFulkerson(T &src, T &dest){
+
+    Graph<T> aux;
+
+    for (int i = 1; i <= vertexSet.size(); i++){
+        aux.addVertex(i);
+    }
+
+    for (int i = 1; i <= vertexSet.size(); i++){
+        auto current = vertexSet.at(i);
+        for(auto edge: current.adj){
+
+            T orig = current.info;
+            T dest = edge.dest.info;
+            double cap = edge.dest.cap; 
+            aux.addEdge(orig, dest, cap);
+        }
+    }
+
+    int maxFlow = 0;
+    std::vector<T> path;
+    Vertex<T> u, v;
+
+    do{
+        std::vector<T> path = bfs(src, dest);
+        if(!path.size()) break;
+        int path_flow = 1000;
+
+        for(v->info = dest; v->info != src; v.path = v){
+            u = v.path;
+            path_flow = min(path_flow, aux->cap);
+        }
+
+    }while(path.size()>0);
 }
 
 //find if there is a path between 2 vertices
