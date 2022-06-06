@@ -689,7 +689,7 @@ void Graph<T>::biggestWaitingTime(T &src){
         }
 
         std::cout << "O tempo maximo de espera de " << maxWaitingTime << " minutos ocorre na(s) paragem(ns) ";
-        for (int i = 0; i < maxWaitingVertex.size(); i++){
+        for (unsigned int i = 0; i < maxWaitingVertex.size(); i++){
             if (i == maxWaitingVertex.size() - 1){
                 std::cout << maxWaitingVertex[i] << std::endl;
             }
@@ -701,10 +701,8 @@ void Graph<T>::biggestWaitingTime(T &src){
 template <class T>
 void Graph<T>::edmondKarpOptimizedFlux(T &src, T &destin, T &passengers) {
     std::set<T> nodes;
-    int maxFlux = 0;
     int minFlux = INF;
     int pathFlux = 0;
-    int totalFlux = 0;
     int allocatedPassengers = 0;
 
     Vertex<T>origin(src);
@@ -779,7 +777,6 @@ void Graph<T>::edmondKarpOptimizedFlux(T &src, T &destin, T &passengers) {
 template <class T>
 void Graph<T>::edmondKarpLimitedFlux(T &src, T &destin, T &passengers) {
     std::set<T> nodes;
-    int maxFlux = 0;
     int minFlux = INF;
     int pathFlux = 0;
     int allocatedPassengers = 0;
