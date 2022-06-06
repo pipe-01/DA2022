@@ -184,7 +184,7 @@ public:
      * @param destin conteúdo do nó de destino
      * @return set que contém todos os nodes visitados
      */
-    void edmondKarpFlux(T &src, T &destin);
+     int edmondKarpMaxFlux(T &src, T &destin);
     /**
      * cria o grafo residual a partir do grafo original, utilizando o algoritmo de Edmond-Karp
      *
@@ -224,12 +224,6 @@ public:
      */
     int pathTrans(std::vector<T> path);
 
-    std::vector<std::vector<T>> dfs(T &src, T &dest);
-
-    int getFlux(std::vector<T> path);
-
-    void fordFulkerson(T &src, T &destin);
-
     /**
      * @brief esta função permite obter o tempo máximo de espera e os locais onde há elementos que esperam esse tempo
      *
@@ -254,6 +248,27 @@ public:
      * @return void
      */
     void longestPath(T &src);
+
+    /**
+     * @brief esta função permite obter os caminhos necessários para acomodar o número de passageiros passangers
+     *
+     * @param src conteúdo do vértice de partida
+     * @param destin conteúdo do vértice de chegada
+     * @param passengers número de passageiros a ser alocado
+     * @return void
+     */
+    void edmondKarpLimitedFlux(T &src, T &destin, T &passengers);
+
+
+     /**
+     * @brief esta função permite obter os caminhos necessários para acomodar o número de passageiros passangers
+     *
+     * @param src conteúdo do vértice de partida
+     * @param destin conteúdo do vértice de chegada
+     * @param passengers número de passageiros a mais a ser alocado
+     * @return void
+     */
+    void edmondKarpOptimizedFlux(T &src, T &destin, T &passengers);
 
 
 };
@@ -520,6 +535,7 @@ void Graph<T>::printPath(std::vector<T> path){
 
 template <class T>
 std::vector<T> Graph<T>::bfs(T &src, T &destin){
+    std::vector<T> path;
     for (auto v: vertexSet){
         v->visited = false;
         v->dist = INF;
@@ -544,7 +560,7 @@ std::vector<T> Graph<T>::bfs(T &src, T &destin){
         }
     }
  
-    std::vector<T> path = getPath(src, destin);
+    path = getPath(src, destin);
     printPath(path);
 
     return path;
@@ -650,37 +666,6 @@ void Graph<T>::longestPath(T &src){
 
 }
 
-/*template <class T>
-void Graph<T>::shortestPath(T &src){
-    MutablePriorityQueue<Vertex<T>> q;
-    for (auto v: vertexSet){
-        v->dist = INF;
-        v->visited = false;
-    }
-    Vertex<T> *s = findVertex(src);
-    s->dist = 0;
-    q.insert(s);
-
-    while (!q.empty()){
-        auto vertex = q.extractMin();
-        vertex->visited = true;
-        for (auto e: vertex->adj){
-            auto oldDist = e.dest->dist;
-            if (relax(vertex, e.dest, e.weight)){
-                if (oldDist == INF)
-                    q.insert(e.dest);
-                else
-                    q.decreaseKey(e.dest);
-            }
-        }
-    }
-
-    *//*for (auto v: vertexSet){
-        std::cout << v->dist << std::endl;
-    }*//*
-
-}*/
-
 template <class T>
 void Graph<T>::biggestWaitingTime(T &src){
 
@@ -714,7 +699,166 @@ void Graph<T>::biggestWaitingTime(T &src){
 }
 
 template <class T>
-void Graph<T>::edmondKarpFlux(T &src, T &destin) {
+void Graph<T>::edmondKarpOptimizedFlux(T &src, T &destin, T &passengers) {
+    std::set<T> nodes;
+    int maxFlux = 0;
+    int minFlux = INF;
+    int pathFlux = 0;
+    int totalFlux = 0;
+    int allocatedPassengers = 0;
+
+    Vertex<T>origin(src);
+    std::vector<T> path;
+    Graph<T> residualGraph;
+
+
+    residualGraph = residGraph();
+    residualGraph.bfs(src, destin);
+    path = residualGraph.getPath(src, destin);
+    for (unsigned int i = 0; i < path.size(); i++){
+        nodes.insert(path[i]);
+    }
+    Vertex<T> dest = *residualGraph.findVertex(destin);
+
+    while(allocatedPassengers < passengers && dest.visited){
+        minFlux = INF;
+        for (unsigned int i = 0; i < path.size() - 1; i++){
+            for(auto edge : residualGraph.findVertex(path[i])->adj){
+                if (edge.dest->info == residualGraph.findVertex(path[i+1])->info){
+                    minFlux = std::min(minFlux, (int)edge.weight);
+                }
+            }
+        }
+
+        for (unsigned int i = 0; i < path.size() - 1; i++){
+            for(auto &edge : findVertex(path[i])->adj){
+                if (edge.dest->info == findVertex(path[i+1])->info){
+                    edge.flux += minFlux;
+                    pathFlux = minFlux;
+                }
+            }
+        }
+
+        std::cout << "Flux: " << pathFlux << std::endl;
+        allocatedPassengers += pathFlux;
+
+        if (allocatedPassengers > passengers){
+            std::cout << "Passageiros alocados ate agora: " << passengers << std::endl;
+        }
+        else{
+            std::cout << "Passageiros alocados ate agora: " << allocatedPassengers << std::endl;
+        }
+
+        if (passengers - allocatedPassengers > 0){
+            std::cout << "Passageiros que ainda precisam de ser alocados: " << passengers - allocatedPassengers << std::endl;
+        }
+
+        else {
+            std::cout << "Passageiros que ainda precisam de ser alocados: " << 0 << std::endl;
+        }
+
+        if (allocatedPassengers >= passengers){
+            break;
+        }
+
+        residualGraph = residGraph();
+        residualGraph.bfs(src, destin);
+        path = residualGraph.getPath(src, destin);
+        for (unsigned int i = 0; i < path.size(); i++){
+            nodes.insert(path[i]);
+        }
+        dest = *residualGraph.findVertex(destin);
+        if (!dest.visited){
+            std::cout << "Nao ha mais caminhos disponiveis, tera(ao) que ficar " << passengers - allocatedPassengers << " pessoas por alocar" << std::endl;
+        }
+
+    }
+
+}
+
+template <class T>
+void Graph<T>::edmondKarpLimitedFlux(T &src, T &destin, T &passengers) {
+    std::set<T> nodes;
+    int maxFlux = 0;
+    int minFlux = INF;
+    int pathFlux = 0;
+    int allocatedPassengers = 0;
+    Vertex<T> origin(src);
+    std::vector<T> path;
+    Graph<T> residualGraph;
+
+
+    for (auto v: vertexSet){
+        for(auto &edge: v->adj){
+            edge.flux = 0;
+        }
+    }
+
+    residualGraph = residGraph();
+    residualGraph.bfs(src, destin);
+    path = residualGraph.getPath(src, destin);
+    for (unsigned int i = 0; i < path.size(); i++){
+        nodes.insert(path[i]);
+    }
+    Vertex<T> dest = *residualGraph.findVertex(destin);
+
+    while(allocatedPassengers < passengers && dest.visited){
+        minFlux = INF;
+        for (unsigned int i = 0; i < path.size() - 1; i++){
+            for(auto edge : residualGraph.findVertex(path[i])->adj){
+                if (edge.dest->info == residualGraph.findVertex(path[i+1])->info){
+                    minFlux = std::min(minFlux, (int)edge.weight);
+                }
+            }
+        }
+
+        for (unsigned int i = 0; i < path.size() - 1; i++){
+            for(auto &edge : findVertex(path[i])->adj){
+                if (edge.dest->info == findVertex(path[i+1])->info){
+                    edge.flux += minFlux;
+                    pathFlux = minFlux;
+                }
+            }
+        }
+
+        std::cout << "Flux: " << pathFlux << std::endl;
+        allocatedPassengers += pathFlux;
+
+        if (allocatedPassengers > passengers){
+            std::cout << "Passageiros alocados ate agora: " << passengers << std::endl;
+        }
+        else{
+            std::cout << "Passageiros alocados ate agora: " << allocatedPassengers << std::endl;
+        }
+
+        if (passengers - allocatedPassengers > 0){
+            std::cout << "Passageiros que ainda precisam de ser alocados: " << passengers - allocatedPassengers << std::endl;
+        }
+
+        else {
+            std::cout << "Passageiros que ainda precisam de ser alocados: " << 0 << std::endl;
+        }
+
+        if (allocatedPassengers >= passengers){
+            break;
+        }
+
+        residualGraph = residGraph();
+        residualGraph.bfs(src, destin);
+        path = residualGraph.getPath(src, destin);
+        for (unsigned int i = 0; i < path.size(); i++){
+            nodes.insert(path[i]);
+        }
+        dest = *residualGraph.findVertex(destin);
+        if (!dest.visited){
+            std::cout << "Nao ha mais caminhos disponiveis, tera(ao) que ficar " << passengers - allocatedPassengers << " pessoas por alocar" << std::endl;
+        }
+
+    }
+}
+
+template <class T>
+int Graph<T>::edmondKarpMaxFlux(T &src, T &destin) {
     std::set<T> nodes;
     int maxFlux = 0;
     int minFlux = INF;
@@ -774,10 +918,7 @@ void Graph<T>::edmondKarpFlux(T &src, T &destin) {
         maxFlux += edge.flux;
     }
 
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << "Max Flux: " << maxFlux << std::endl;
+    return maxFlux;
 }
 
 template<class T>
@@ -799,7 +940,6 @@ Graph<T> Graph<T>::residGraph() {
             }
             if(edge.flux > 0){
                 residualGraph.addEdge(edge.dest->info, v->info, edge.flux);
-                //residualGraph.setFlux(edge.dest->info, v->info, edge.weight - edge.flux); -> n sei se isto é necessário
             }
         }
     }
@@ -816,141 +956,5 @@ void Graph<T>::setFlux(const T &sourc, const T &dest, int f){
         }
     }
 }
-
-template <class T>
-std::vector<std::vector<T>> Graph<T>::dfs(T &src, T &dest){
-
-    std::vector<std::vector<T>> paths;
-    for (auto v: vertexSet){
-        v->visited = false;
-        v->dist = INF;
-        v->path = nullptr;
-    }
-
-    auto srcVertex = findVertex(src);
-    srcVertex->dist = 0;
-
-    std::stack<Vertex<T>*> st;
-    st.push(srcVertex);
-
-    while (!st.empty()){
-
-        Vertex<T> *current = st.top();
-        st.pop();
-        std::cout << "current: " << current->info << std::endl;
-        current->visited = true;
-        if(current->info == dest){
-            current->visited = false;
-            std::vector<T> path = getPath(src, dest);
-            paths.push_back(path);
-        }
-        for (auto &e: current->adj){
-            if (!e.dest->visited){
-                std::cout << e.dest->info << std::endl;
-                st.push(e.dest);
-                //e.dest->visited = true;
-                e.dest->path = current;
-            }
-        }
-    }
-/* 
-    for(auto path: paths){
-
-        printPath(path);
-    }
-*/
-    return paths;
-}
-
-template <class T>
-int Graph<T>::getFlux(std::vector<T> path){
-
-    int flux = 1000;
-    for(unsigned int i = 0; i < path.size()-1; i++){
-        auto src = findVertex(path.at(i));
-        auto dest = findVertex(path.at(i+1));
-        for(auto &edge: src->adj){
-            if(edge.dest == dest && edge.getWeight() < flux){
-                flux = edge.getWeight();
-            }
-        }
-    }
-
-    return flux;
-}
-
-template <class T>
-void Graph<T>::fordFulkerson(T &src, T &dest){
-
-    Graph<T> aux;
-
-    for (int i = 1; i <= vertexSet.size(); i++){
-        aux.addVertex(i);
-    }
-
-    for (int i = 1; i <= vertexSet.size(); i++){
-        auto current = vertexSet.at(i);
-        for(auto edge: current.adj){
-
-            T orig = current.info;
-            T dest = edge.dest.info;
-            double cap = edge.dest.cap; 
-            aux.addEdge(orig, dest, cap);
-        }
-    }
-
-    int maxFlow = 0;
-    std::vector<T> path;
-    Vertex<T> u, v;
-
-    do{
-        std::vector<T> path = bfs(src, dest);
-        if(!path.size()) break;
-        int path_flow = 1000;
-
-        for(v->info = dest; v->info != src; v.path = v){
-            u = v.path;
-            path_flow = min(path_flow, aux->cap);
-        }
-
-    }while(path.size()>0);
-}
-
-//find if there is a path between 2 vertices
-/*template <class T>
-bool bfs(Graph<T> graph, Vertex<T> begin, Vertex<T> end){
-
-    Vertex<T> current;
-    int maxPassage=10000;
-    int numVert = graph.getNumVertex();
-    std::vector<bool> toVisit(graph.vertexSet.size(),true);
-    std::queue<Vertex<int>> queue;
-    int index, endIndex=graph.findVertex(end.info);
-
-    queue.push(begin);
-
-    while(queue.size()){
-
-        current = queue.pop();
-        index = graph.findVertex(current.info);
-        toVisit.at(index) = false;
-        for(int i = 0; i < current.adj.size(); i++){
-
-            if(index == endIndex){
-                return true;
-            }
-            if(toVisit.at(index)){
-                Vertex<int> aux = current.adj[i].dest;
-                index = graph.findVertex(aux);
-                toVisit.at(index) = false;
-                queue.push(current.adj[i].dest);
-            }
-        }
-    }
-
-    return false;
-}*/
-
-
 
 #endif

@@ -20,10 +20,14 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
 
     File file;
     std::set<int> nodes;
+    int dimen, finalDimen;
+    bool entered21 = false;
 
     while(true){
-        int src, dest, cap, trans, dimen;
+        int src, dest, cap, trans, increasedDimen, maxFlow;
         std::vector<int> path;
+
+        std::cout << std::endl;
         std::cout << "Selecione a opcao (choice1): ";
         std::cin >> choice1;
         switch (choice1) {
@@ -32,7 +36,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                 std::cout << "1.1- Cenario 1.1" << std::endl;
                 std::cout << "1.2- Cenario 1.2" << std::endl;
                 std::cout << std::endl;
-                std::cout << "Selecione a opcao: ";
+                std::cout << "Selecione a opcao (choice 2): ";
                 std::cin >> choice2;
 
 
@@ -52,7 +56,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     graphCap.printPath(path);
                     cap = graphCap.pathCap(path);
 
-                    std::cout << "Maximum number of people in this path: " << cap << std::endl;
+                    std::cout << "Maxima capacidade: " << cap << std::endl;
                     std::cout << std::endl;
                 }
                 else if (choice2 == "1.2") {
@@ -82,7 +86,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                 std::cout << "2.4 - Cenario 2.4" << std::endl;
                 std::cout << "2.5-  Cenario 2.5" << std::endl;
                 std::cout << std::endl;
-                std::cout << "Selecione a opcao: ";
+                std::cout << "Selecione a opcao (choice 2): ";
                 std::cin >> choice2;
 
                 if(choice2 == "2.1"){
@@ -90,6 +94,7 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::vector<std::vector<int>> paths;
                     Graph<int> graphCap;
                     file.buildGraphCap(graphCap);
+                    entered21 = true;
                     
                     std::cout << "Partida: " << std::endl;
                     std::cin >> src;
@@ -99,80 +104,33 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cin >> dimen;
                     std::cout << std::endl;
 
-                    paths = graphCap.dfs(src, dest);
-                    int unallocated = dimen;
-                    
-                    for(auto path: paths){
-                        if(unallocated>0){
-                            int flux = graphCap.getFlux(path);
-                            std::cout << "Path: ";
-                            graphCap.printPath(path);
-                            std::cout << "Path's Flux: " << flux << std::endl;
-                            int allocated = unallocated;
-                            if(unallocated > flux){
-                                allocated = flux;
-                            }
-                            std::cout << "Passengers allocated to this path: " << allocated << std::endl;
-                            unallocated -= flux;
-                            if(unallocated < 0) unallocated = 0;
-                            std::cout << "Free spots for this path: " << flux - allocated << std::endl;
-                            std::cout << "Passegers to still allocate to a path: " << unallocated << std::endl << std::endl;
-                        }
-                    }
+                    graphCap.edmondKarpLimitedFlux(src, dest, dimen);
 
                 }
                 else if(choice2 == "2.2"){
-                    std::vector<std::vector<int>> paths;
+                    if (!entered21) {
+                        std::cout << "Need to execute 2.1 first" << std::endl;
+                        break;
+                    }
                     Graph<int> graphCap;
                     file.buildGraphCap(graphCap);
                     std::cout << "Partida: " << std::endl;
                     std::cin >> src;
                     std::cout << "Chegada: " << std::endl;
                     std::cin >> dest;
-                    std::cout << "Dimensao do grupo: " << std::endl;
-                    std::cin >> dimen;
+                    std::cout << "Quantas pessoas quer colocar a mais no grupo?: " << std::endl;
+                    std::cin >> increasedDimen;
+                    finalDimen = dimen + increasedDimen;
                     std::cout << std::endl;
 
-                    paths = graphCap.dfs(src, dest);
+                    //maxFlow = graphCap.edmondKarpMaxFlux(src, dest);
+                    //if (finalDimen > maxFlow){
+                      //  std::cout << "Nao e possivel alocar mais pessoas para esta viagem (" << "Dimensao final: " << finalDimen << " > " << "Flow maximo: " << maxFlow << ")" << std::endl;
+                    //}
+                    //else{
+                        graphCap.edmondKarpOptimizedFlux(src, dest, finalDimen);
+                    //}
 
-                    std::vector<std::vector<int>> aux(paths);
-                    int unallocated = dimen;
-
-                    while(unallocated > 0){
-                        int maxIndex = 0;
-                        int fluxMax = 0;
-                        for(unsigned int i = 0; i < aux.size(); i++){
-                            int flux = graphCap.getFlux(aux.at(i));
-                            if(flux > fluxMax){
-                                fluxMax = flux;
-                                maxIndex = i;
-                            }
-                        }
-                        std::cout << "Path: ";
-                        graphCap.printPath(aux.at(maxIndex));
-                        std::cout << "Path's Flux: " << fluxMax << std::endl;
-                        int allocated = unallocated;
-                        if(allocated > fluxMax){
-                            allocated = fluxMax;
-                        }
-                        std::cout << "Passengers allocated to this path: " << allocated << std::endl;
-                        unallocated -= fluxMax;
-                        if(unallocated < 0) unallocated = 0;
-                        std::cout << "Free spots for this path: " << fluxMax - allocated << std::endl;
-                        std::cout << "Passegers to still allocate to a path: " << unallocated << std::endl << std::endl;
-                        aux.erase(aux.begin()+maxIndex);
-
-                        //Case all paths were filled and there are still unallocated people
-                        if(aux.empty()){
-                            if(unallocated>0){
-                                std::cout << "All paths were filled, but there are still " << unallocated << " unallocated  people" << std::endl;
-                            }
-                            else{
-                                std::cout << "Everyone allocated to a path!" << std::endl;
-                            }
-                            break;
-                        }
-                    }
                 }
                 else if (choice2 == "2.3"){
 
@@ -186,7 +144,8 @@ void Menu::takeInput(Graph<int> &graphCap, Graph<int> &graphDur){
                     std::cin >> dest;
                     std::cout << std::endl;
 
-                    graphCap.edmondKarpFlux(src, dest);
+                    maxFlow = graphCap.edmondKarpMaxFlux(src, dest);
+                    std::cout << "Max flux: " << maxFlow << std::endl;
                 }
                 else if (choice2 == "2.4"){
 
